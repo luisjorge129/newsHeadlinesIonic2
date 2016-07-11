@@ -8,7 +8,7 @@ import {NewsHeadline} from '../home/newsHeadline.service';
 })
 
 export class NewsList {
-    constructor (private newsHeadline: NewsHeadline) {}
+    // constructor (private newsHeadline: NewsHeadline) {}
 
     // ngOnInit() { this.newsHeadline.getSources(); }    
 }
