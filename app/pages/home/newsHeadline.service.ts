@@ -1,40 +1,39 @@
-// import { Injectable }     from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Http, Response, URLSearchParams } from '@angular/http';
 // import { Observable }     from 'rxjs/Observable';
 
-// import 'rxjs/add/operator/map';
-// import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/toPromise';
 
-// @Injectable()
-export class NewsHeadline {
+@Injectable()
+export class NewsHeadlineService {
   constructor (private http: Http) {}
   private newsUrl = 'https://newsapi.org/v1/';  // URL to web API
 
-  // getSources () {
-  //   var searchParams = new URLSearchParams();
+  getSources () {
+    var searchParams = new URLSearchParams();
 
-  //   searchParams.append('apiKey', 'f47ec438629b40af849f1d74828da59a');
+    searchParams.append('apiKey', 'f47ec438629b40af849f1d74828da59a');
 
-  //   console.log(this.newsUrl + "sources",
-  //           {search: searchParams});
+    return this.http.get(this.newsUrl + "sources",
+            { search: searchParams })
+            .map(response => {
+                return response.json().sources
+            });
+   }
 
-  //   return this.http.get(this.newsUrl + "sources",
-  //           {search: searchParams})
-  //           .toPromise()
-  //           .then(response => response.json().data);
-  //  }
+   getArticles(source) {
+    var searchParams = new URLSearchParams();
 
-  //  getArticles(source) {
-  //   var searchParams = new URLSearchParams();
+    searchParams.append('apiKey', 'f47ec438629b40af849f1d74828da59a');
+    searchParams.append('source', source);
 
-  //   searchParams.append('apiKey', 'f47ec438629b40af849f1d74828da59a');
-  //   searchParams.append('source', source);
-
-  //   return this.http.get(this.newsUrl + "articles",
-  //           { search: searchParams })
-  //           .toPromise()
-  //           .then(response => response.json().data);
-  //  }
+    return this.http.get(this.newsUrl + "articles",
+            { search: searchParams })
+            .map(response => {
+                return response.json().articles
+            });
+   }
 
   // private extractData(res: Response) {
   //   let body = res.json();
