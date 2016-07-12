@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {NewsHeadlineService} from '../home/newsHeadline.service';
 import {NavController} from 'ionic-angular';
-import {OtherPage} from '../home/sourceDetail.component';
+import {sourceArticles} from '../home/sourceDetail.component';
 
 @Component({
   selector: 'source-list',
@@ -22,7 +22,13 @@ export class SourceList {
         });
     }
 
-    sourceArticle(event){        
-        this.nav.push(OtherPage);
-    }
+    sourceArticle(source, sourceTitle){
+        this.nav.push(sourceArticles, {
+                source: source,
+                sourceTitle: sourceTitle
+            }
+            // {direction: 'forward'}
+        );
+
+    }   
 }

@@ -7,34 +7,34 @@ import 'rxjs/add/operator/toPromise';
 @Injectable()
 export class NewsHeadlineService {
 
-  constructor (private http: Http, @Inject('apiKey') key) {
-      this.key = key;
-  }
+    constructor (private http: Http, @Inject('apiKey') key) {
+        this.key = key;
+    }
 
-  getSources () {
-    var searchParams = new URLSearchParams();
+    getSources () {
+        var searchParams = new URLSearchParams();
 
-    searchParams.append('apiKey', this.key);
+        searchParams.append('apiKey', this.key);
 
-    return this.http.get(this.newsUrl + "sources",
-            { search: searchParams })
-            .map(response => {
-                return response.json().sources
-            });
-   }
+        return this.http.get(this.newsUrl + "sources",
+                { search: searchParams })
+                .map(response => {
+                    return response.json().sources
+                });
+    }
 
-   getArticles(source) {
-    var searchParams = new URLSearchParams();
+    getArticles(source) {
+        var searchParams = new URLSearchParams();
 
-    searchParams.append('apiKey', this.key);
-    searchParams.append('source', source);
+        searchParams.append('apiKey', this.key);
+        searchParams.append('source', source);
 
-    return this.http.get(this.newsUrl + "articles",
-            { search: searchParams })
-            .map(response => {
-                return response.json().articles
-            });
-   }
+        return this.http.get(this.newsUrl + "articles",
+                { search: searchParams })
+                .map(response => {
+                    return response.json()
+                });
+    }
 
   // private extractData(res: Response) {
   //   let body = res.json();
