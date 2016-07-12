@@ -3,12 +3,12 @@ import { Component } from '@angular/core';
 import { TabsPage } from './pages/tabs/tabs';
 import { HTTP_PROVIDERS } from '@angular/http';
 import { Platform, ionicBootstrap } from 'ionic-angular';
-import { NewsHeadline } from './pages/home/newsHeadline.service';
+import { NewsHeadlineService } from './pages/home/newsHeadline.service';
 
 @Component({
     template: '<ion-nav [root]="rootPage"></ion-nav>',
     providers: [
-        NewsHeadline,
+        NewsHeadlineService,
         { provide: 'apiKey', useValue: 'f47ec438629b40af849f1d74828da59a' }]
 })
 export class MyApp {
