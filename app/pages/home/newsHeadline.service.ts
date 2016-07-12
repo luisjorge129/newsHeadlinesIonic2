@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { Http, Response, URLSearchParams } from '@angular/http';
 
 import 'rxjs/add/operator/map';
@@ -6,13 +6,15 @@ import 'rxjs/add/operator/toPromise';
 
 @Injectable()
 export class NewsHeadlineService {
-  constructor (private http: Http) {}
-  private newsUrl = 'https://newsapi.org/v1/';  // URL to web API
+
+  constructor (private http: Http, @Inject('apiKey') key) {
+      this.key = key;
+  }
 
   getSources () {
     var searchParams = new URLSearchParams();
 
-    searchParams.append('apiKey', 'f47ec438629b40af849f1d74828da59a');
+    searchParams.append('apiKey', this.key);
 
     return this.http.get(this.newsUrl + "sources",
             { search: searchParams })
@@ -24,7 +26,7 @@ export class NewsHeadlineService {
    getArticles(source) {
     var searchParams = new URLSearchParams();
 
-    searchParams.append('apiKey', 'f47ec438629b40af849f1d74828da59a');
+    searchParams.append('apiKey', this.key);
     searchParams.append('source', source);
 
     return this.http.get(this.newsUrl + "articles",
@@ -46,4 +48,7 @@ export class NewsHeadlineService {
   //   console.error(errMsg); // log to console instead
   //   return Observable.throw(errMsg);
   // }
+
+    private key: string;
+    private newsUrl = 'https://newsapi.org/v1/';
 }
