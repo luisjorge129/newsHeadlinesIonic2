@@ -9,8 +9,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var ionic_native_1 = require('ionic-native');
 var core_1 = require('@angular/core');
+var ionic_native_1 = require('ionic-native');
 var tabs_1 = require('./pages/tabs/tabs');
 var http_1 = require('@angular/http');
 var ionic_angular_1 = require('ionic-angular');
@@ -28,9 +28,7 @@ var MyApp = (function () {
     MyApp = __decorate([
         core_1.Component({
             template: '<ion-nav [root]="rootPage"></ion-nav>',
-            providers: [
-                newsHeadline_service_1.NewsHeadline,
-                { provide: 'apiKey', useValue: 'f47ec438629b40af849f1d74828da59a' }]
+            providers: [newsHeadline_service_1.NewsHeadlineService]
         }), 
         __metadata('design:paramtypes', [ionic_angular_1.Platform])
     ], MyApp);
@@ -138,15 +136,23 @@ var newsHeadline_service_1 = require('../home/newsHeadline.service');
 var NewsList = (function () {
     function NewsList(newsHeadline) {
         this.newsHeadline = newsHeadline;
+        this.sourceList = [];
     }
-    NewsList.prototype.ngOnInit = function () { this.newsHeadline.getSources(); };
+    NewsList.prototype.ngOnInit = function () {
+        var _this = this;
+        this.newsHeadline.getSources()
+            .subscribe(function (sourceList) {
+            _this.sourceList = sourceList;
+        });
+        console.log(this.sourceList);
+    };
     NewsList = __decorate([
         core_1.Component({
             selector: 'source-list',
             templateUrl: 'build/pages/home/list.component.html',
-            styleUrls: ['/home/list.component.css']
+            styleUrls: ['/home/list.component.css'],
         }), 
-        __metadata('design:paramtypes', [newsHeadline_service_1.NewsHeadline])
+        __metadata('design:paramtypes', [newsHeadline_service_1.NewsHeadlineService])
     ], NewsList);
     return NewsList;
 }());
@@ -163,55 +169,41 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
-require('rxjs/add/operator/map');
-require('rxjs/add/operator/toPromise');
-var Observable_1 = require('rxjs/Observable');
 var core_1 = require('@angular/core');
 var http_1 = require('@angular/http');
-var NewsHeadline = (function () {
-    function NewsHeadline(http, key) {
+require('rxjs/add/operator/map');
+require('rxjs/add/operator/toPromise');
+var NewsHeadlineService = (function () {
+    function NewsHeadlineService(http) {
         this.http = http;
-        this.newsUrl = 'https://newsapi.org/v1';
-        this.key = key;
+        this.newsUrl = 'https://newsapi.org/v1/'; // URL to web API
     }
-    NewsHeadline.prototype.getSources = function () {
+    NewsHeadlineService.prototype.getSources = function () {
         var searchParams = new http_1.URLSearchParams();
-        searchParams.append('apiKey', this.key);
-        return this.http.get(this.newsUrl + "/sources", { search: searchParams })
-            .toPromise()
-            .then(function (response) { return response.json().data; });
+        searchParams.append('apiKey', 'f47ec438629b40af849f1d74828da59a');
+        return this.http.get(this.newsUrl + "sources", { search: searchParams })
+            .map(function (response) {
+            return response.json().sources;
+        });
     };
-    NewsHeadline.prototype.getArticles = function (source) {
+    NewsHeadlineService.prototype.getArticles = function (source) {
         var searchParams = new http_1.URLSearchParams();
-        searchParams.append('apiKey', this.key);
+        searchParams.append('apiKey', 'f47ec438629b40af849f1d74828da59a');
         searchParams.append('source', source);
-        return this.http.get(this.newsUrl + "/articles", { search: searchParams })
-            .toPromise()
-            .then(function (response) { return response.json().data; });
+        return this.http.get(this.newsUrl + "articles", { search: searchParams })
+            .map(function (response) {
+            return response.json().articles;
+        });
     };
-    NewsHeadline.prototype.extractData = function (res) {
-        var body = res.json();
-        return body.data || {};
-    };
-    NewsHeadline.prototype.handleError = function (error) {
-        var errMsg = (error.message) ? error.message :
-            error.status ? error.status + " - " + error.statusText : 'Server error';
-        console.error(errMsg); // log to console instead
-        return Observable_1.Observable.throw(errMsg);
-    };
-    NewsHeadline = __decorate([
-        core_1.Injectable(),
-        __param(1, core_1.Inject('apiKey')), 
-        __metadata('design:paramtypes', [http_1.Http, String])
-    ], NewsHeadline);
-    return NewsHeadline;
+    NewsHeadlineService = __decorate([
+        core_1.Injectable(), 
+        __metadata('design:paramtypes', [http_1.Http])
+    ], NewsHeadlineService);
+    return NewsHeadlineService;
 }());
-exports.NewsHeadline = NewsHeadline;
+exports.NewsHeadlineService = NewsHeadlineService;
 
-},{"@angular/core":154,"@angular/http":242,"rxjs/Observable":512,"rxjs/add/operator/map":518,"rxjs/add/operator/toPromise":519}],7:[function(require,module,exports){
+},{"@angular/core":154,"@angular/http":242,"rxjs/add/operator/map":518,"rxjs/add/operator/toPromise":519}],7:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;

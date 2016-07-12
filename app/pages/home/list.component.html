@@ -1,1 +1,11 @@
-<p>Test2</p>
+<h4>Sources</h4>
+
+<ion-list *ngFor="let source of sourceList">
+  <ion-item>
+    <ion-thumbnail item-left>
+      <img src="{{ source.urlsToLogos.medium }}">
+    </ion-thumbnail>
+    <h2>{{ source.name }}</h2>
+    <p>{{ source.description }}</p>
+  </ion-item>
+</ion-list>
