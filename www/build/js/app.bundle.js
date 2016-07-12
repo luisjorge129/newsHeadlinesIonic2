@@ -10,10 +10,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var ionic_angular_1 = require('ionic-angular');
 var ionic_native_1 = require('ionic-native');
 var tabs_1 = require('./pages/tabs/tabs');
 var http_1 = require('@angular/http');
+var ionic_angular_1 = require('ionic-angular');
+var newsHeadline_service_1 = require('./pages/home/newsHeadline.service');
 var MyApp = (function () {
     function MyApp(platform) {
         this.platform = platform;
@@ -26,7 +27,8 @@ var MyApp = (function () {
     }
     MyApp = __decorate([
         core_1.Component({
-            template: '<ion-nav [root]="rootPage"></ion-nav>'
+            template: '<ion-nav [root]="rootPage"></ion-nav>',
+            providers: [newsHeadline_service_1.NewsHeadline]
         }), 
         __metadata('design:paramtypes', [ionic_angular_1.Platform])
     ], MyApp);
@@ -35,7 +37,7 @@ var MyApp = (function () {
 exports.MyApp = MyApp;
 ionic_angular_1.ionicBootstrap(MyApp, [http_1.HTTP_PROVIDERS]);
 
-},{"./pages/tabs/tabs":7,"@angular/core":154,"@angular/http":242,"ionic-angular":418,"ionic-native":445}],2:[function(require,module,exports){
+},{"./pages/home/newsHeadline.service":6,"./pages/tabs/tabs":7,"@angular/core":154,"@angular/http":242,"ionic-angular":418,"ionic-native":445}],2:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -135,6 +137,7 @@ var NewsList = (function () {
     function NewsList(newsHeadline) {
         this.newsHeadline = newsHeadline;
     }
+    NewsList.prototype.ngOnInit = function () { this.newsHeadline.getSources(); };
     NewsList = __decorate([
         core_1.Component({
             selector: 'source-list',
@@ -149,20 +152,60 @@ exports.NewsList = NewsList;
 
 },{"../home/newsHeadline.service":6,"@angular/core":154}],6:[function(require,module,exports){
 "use strict";
-// import { Observable }     from 'rxjs/Observable';
-// import 'rxjs/add/operator/map';
-// import 'rxjs/add/operator/toPromise';
-// @Injectable()
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+require('rxjs/add/operator/map');
+require('rxjs/add/operator/toPromise');
+var Observable_1 = require('rxjs/Observable');
+var core_1 = require('@angular/core');
+var http_1 = require('@angular/http');
 var NewsHeadline = (function () {
     function NewsHeadline(http) {
         this.http = http;
         this.newsUrl = 'https://newsapi.org/v1/'; // URL to web API
     }
+    NewsHeadline.prototype.getSources = function () {
+        var searchParams = new http_1.URLSearchParams();
+        searchParams.append('apiKey', 'f47ec438629b40af849f1d74828da59a');
+        console.log(this.newsUrl + "sources", { search: searchParams });
+        return this.http.get(this.newsUrl + "sources", { search: searchParams })
+            .toPromise()
+            .then(function (response) { return response.json().data; });
+    };
+    NewsHeadline.prototype.getArticles = function (source) {
+        var searchParams = new http_1.URLSearchParams();
+        searchParams.append('apiKey', 'f47ec438629b40af849f1d74828da59a');
+        searchParams.append('source', source);
+        return this.http.get(this.newsUrl + "articles", { search: searchParams })
+            .toPromise()
+            .then(function (response) { return response.json().data; });
+    };
+    NewsHeadline.prototype.extractData = function (res) {
+        var body = res.json();
+        return body.data || {};
+    };
+    NewsHeadline.prototype.handleError = function (error) {
+        var errMsg = (error.message) ? error.message :
+            error.status ? error.status + " - " + error.statusText : 'Server error';
+        console.error(errMsg); // log to console instead
+        return Observable_1.Observable.throw(errMsg);
+    };
+    NewsHeadline = __decorate([
+        core_1.Injectable(), 
+        __metadata('design:paramtypes', [http_1.Http])
+    ], NewsHeadline);
     return NewsHeadline;
 }());
 exports.NewsHeadline = NewsHeadline;
 
-},{}],7:[function(require,module,exports){
+},{"@angular/core":154,"@angular/http":242,"rxjs/Observable":512,"rxjs/add/operator/map":518,"rxjs/add/operator/toPromise":519}],7:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1217,7 +1260,7 @@ var EventEmitter = (function (_super) {
 }(Subject_1.Subject));
 exports.EventEmitter = EventEmitter;
 
-},{"./lang":25,"./promise":26,"rxjs/Observable":512,"rxjs/Subject":514,"rxjs/observable/PromiseObservable":518,"rxjs/operator/toPromise":519}],20:[function(require,module,exports){
+},{"./lang":25,"./promise":26,"rxjs/Observable":512,"rxjs/Subject":514,"rxjs/observable/PromiseObservable":520,"rxjs/operator/toPromise":522}],20:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -10146,7 +10189,7 @@ var SimpleExpressionChecker = (function () {
 
 },{"../facade/collection":92,"../facade/exceptions":94,"../facade/lang":95,"../interpolation_config":109,"./ast":87,"./lexer":88,"@angular/core":154}],90:[function(require,module,exports){
 arguments[4][19][0].apply(exports,arguments)
-},{"./lang":95,"./promise":97,"dup":19,"rxjs/Observable":512,"rxjs/Subject":514,"rxjs/observable/PromiseObservable":518,"rxjs/operator/toPromise":519}],91:[function(require,module,exports){
+},{"./lang":95,"./promise":97,"dup":19,"rxjs/Observable":512,"rxjs/Subject":514,"rxjs/observable/PromiseObservable":520,"rxjs/operator/toPromise":522}],91:[function(require,module,exports){
 arguments[4][20][0].apply(exports,arguments)
 },{"dup":20}],92:[function(require,module,exports){
 arguments[4][21][0].apply(exports,arguments)
@@ -28386,7 +28429,7 @@ function _createDependency(token /** TODO #9100 */, optional /** TODO #9100 */, 
 
 },{"../facade/collection":195,"../facade/lang":198,"../reflection/reflection":228,"./forward_ref":183,"./metadata":185,"./provider":187,"./provider_util":188,"./reflective_exceptions":189,"./reflective_key":191}],193:[function(require,module,exports){
 arguments[4][19][0].apply(exports,arguments)
-},{"./lang":198,"./promise":200,"dup":19,"rxjs/Observable":512,"rxjs/Subject":514,"rxjs/observable/PromiseObservable":518,"rxjs/operator/toPromise":519}],194:[function(require,module,exports){
+},{"./lang":198,"./promise":200,"dup":19,"rxjs/Observable":512,"rxjs/Subject":514,"rxjs/observable/PromiseObservable":520,"rxjs/operator/toPromise":522}],194:[function(require,module,exports){
 arguments[4][20][0].apply(exports,arguments)
 },{"dup":20}],195:[function(require,module,exports){
 arguments[4][21][0].apply(exports,arguments)
@@ -37595,7 +37638,7 @@ exports.bootstrapWorkerApp = bootstrapWorkerApp;
 
 },{"./core_private":262,"./src/facade/async":264,"./src/facade/lang":269,"./src/xhr/xhr_cache":271,"./src/xhr/xhr_impl":272,"@angular/common":8,"@angular/compiler":73,"@angular/core":154,"@angular/platform-browser":274}],264:[function(require,module,exports){
 arguments[4][19][0].apply(exports,arguments)
-},{"./lang":269,"./promise":270,"dup":19,"rxjs/Observable":512,"rxjs/Subject":514,"rxjs/observable/PromiseObservable":518,"rxjs/operator/toPromise":519}],265:[function(require,module,exports){
+},{"./lang":269,"./promise":270,"dup":19,"rxjs/Observable":512,"rxjs/Subject":514,"rxjs/observable/PromiseObservable":520,"rxjs/operator/toPromise":522}],265:[function(require,module,exports){
 arguments[4][20][0].apply(exports,arguments)
 },{"dup":20}],266:[function(require,module,exports){
 arguments[4][21][0].apply(exports,arguments)
@@ -40189,7 +40232,7 @@ exports.WebAnimationsPlayer = WebAnimationsPlayer;
 
 },{"../facade/lang":305}],299:[function(require,module,exports){
 arguments[4][19][0].apply(exports,arguments)
-},{"./lang":305,"./promise":306,"dup":19,"rxjs/Observable":512,"rxjs/Subject":514,"rxjs/observable/PromiseObservable":518,"rxjs/operator/toPromise":519}],300:[function(require,module,exports){
+},{"./lang":305,"./promise":306,"dup":19,"rxjs/Observable":512,"rxjs/Subject":514,"rxjs/observable/PromiseObservable":520,"rxjs/operator/toPromise":522}],300:[function(require,module,exports){
 arguments[4][20][0].apply(exports,arguments)
 },{"dup":20}],301:[function(require,module,exports){
 "use strict";
@@ -85333,7 +85376,7 @@ var Observable = (function () {
 }());
 exports.Observable = Observable;
 
-},{"./symbol/observable":520,"./util/root":528,"./util/toSubscriber":530}],513:[function(require,module,exports){
+},{"./symbol/observable":523,"./util/root":531,"./util/toSubscriber":533}],513:[function(require,module,exports){
 "use strict";
 exports.empty = {
     isUnsubscribed: true,
@@ -85549,7 +85592,7 @@ var SubjectObservable = (function (_super) {
     return SubjectObservable;
 }(Observable_1.Observable));
 
-},{"./Observable":512,"./SubjectSubscription":515,"./Subscriber":516,"./Subscription":517,"./symbol/rxSubscriber":521,"./util/ObjectUnsubscribedError":522,"./util/throwError":529}],515:[function(require,module,exports){
+},{"./Observable":512,"./SubjectSubscription":515,"./Subscriber":516,"./Subscription":517,"./symbol/rxSubscriber":524,"./util/ObjectUnsubscribedError":525,"./util/throwError":532}],515:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -85842,7 +85885,7 @@ var SafeSubscriber = (function (_super) {
     return SafeSubscriber;
 }(Subscriber));
 
-},{"./Observer":513,"./Subscription":517,"./symbol/rxSubscriber":521,"./util/isFunction":526}],517:[function(require,module,exports){
+},{"./Observer":513,"./Subscription":517,"./symbol/rxSubscriber":524,"./util/isFunction":529}],517:[function(require,module,exports){
 "use strict";
 var isArray_1 = require('./util/isArray');
 var isObject_1 = require('./util/isObject');
@@ -85993,7 +86036,19 @@ var Subscription = (function () {
 }());
 exports.Subscription = Subscription;
 
-},{"./util/UnsubscriptionError":523,"./util/errorObject":524,"./util/isArray":525,"./util/isFunction":526,"./util/isObject":527,"./util/tryCatch":531}],518:[function(require,module,exports){
+},{"./util/UnsubscriptionError":526,"./util/errorObject":527,"./util/isArray":528,"./util/isFunction":529,"./util/isObject":530,"./util/tryCatch":534}],518:[function(require,module,exports){
+"use strict";
+var Observable_1 = require('../../Observable');
+var map_1 = require('../../operator/map');
+Observable_1.Observable.prototype.map = map_1.map;
+
+},{"../../Observable":512,"../../operator/map":521}],519:[function(require,module,exports){
+"use strict";
+var Observable_1 = require('../../Observable');
+var toPromise_1 = require('../../operator/toPromise');
+Observable_1.Observable.prototype.toPromise = toPromise_1.toPromise;
+
+},{"../../Observable":512,"../../operator/toPromise":522}],520:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -86099,7 +86154,94 @@ function dispatchError(arg) {
     }
 }
 
-},{"../Observable":512,"../util/root":528}],519:[function(require,module,exports){
+},{"../Observable":512,"../util/root":531}],521:[function(require,module,exports){
+"use strict";
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var Subscriber_1 = require('../Subscriber');
+/**
+ * Applies a given `project` function to each value emitted by the source
+ * Observable, and emits the resulting values as an Observable.
+ *
+ * <span class="informal">Like [Array.prototype.map()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map),
+ * it passes each source value through a transformation function to get
+ * corresponding output values.</span>
+ *
+ * <img src="./img/map.png" width="100%">
+ *
+ * Similar to the well known `Array.prototype.map` function, this operator
+ * applies a projection to each value and emits that projection in the output
+ * Observable.
+ *
+ * @example <caption>Map every every click to the clientX position of that click</caption>
+ * var clicks = Rx.Observable.fromEvent(document, 'click');
+ * var positions = clicks.map(ev => ev.clientX);
+ * positions.subscribe(x => console.log(x));
+ *
+ * @see {@link mapTo}
+ * @see {@link pluck}
+ *
+ * @param {function(value: T, index: number): R} project The function to apply
+ * to each `value` emitted by the source Observable. The `index` parameter is
+ * the number `i` for the i-th emission that has happened since the
+ * subscription, starting from the number `0`.
+ * @param {any} [thisArg] An optional argument to define what `this` is in the
+ * `project` function.
+ * @return {Observable<R>} An Observable that emits the values from the source
+ * Observable transformed by the given `project` function.
+ * @method map
+ * @owner Observable
+ */
+function map(project, thisArg) {
+    if (typeof project !== 'function') {
+        throw new TypeError('argument is not a function. Are you looking for `mapTo()`?');
+    }
+    return this.lift(new MapOperator(project, thisArg));
+}
+exports.map = map;
+var MapOperator = (function () {
+    function MapOperator(project, thisArg) {
+        this.project = project;
+        this.thisArg = thisArg;
+    }
+    MapOperator.prototype.call = function (subscriber, source) {
+        return source._subscribe(new MapSubscriber(subscriber, this.project, this.thisArg));
+    };
+    return MapOperator;
+}());
+/**
+ * We need this JSDoc comment for affecting ESDoc.
+ * @ignore
+ * @extends {Ignored}
+ */
+var MapSubscriber = (function (_super) {
+    __extends(MapSubscriber, _super);
+    function MapSubscriber(destination, project, thisArg) {
+        _super.call(this, destination);
+        this.project = project;
+        this.count = 0;
+        this.thisArg = thisArg || this;
+    }
+    // NOTE: This looks unoptimized, but it's actually purposefully NOT
+    // using try/catch optimizations.
+    MapSubscriber.prototype._next = function (value) {
+        var result;
+        try {
+            result = this.project.call(this.thisArg, value, this.count++);
+        }
+        catch (err) {
+            this.destination.error(err);
+            return;
+        }
+        this.destination.next(result);
+    };
+    return MapSubscriber;
+}(Subscriber_1.Subscriber));
+
+},{"../Subscriber":516}],522:[function(require,module,exports){
 "use strict";
 var root_1 = require('../util/root');
 /**
@@ -86128,7 +86270,7 @@ function toPromise(PromiseCtor) {
 }
 exports.toPromise = toPromise;
 
-},{"../util/root":528}],520:[function(require,module,exports){
+},{"../util/root":531}],523:[function(require,module,exports){
 "use strict";
 var root_1 = require('../util/root');
 var Symbol = root_1.root.Symbol;
@@ -86150,14 +86292,14 @@ else {
     exports.$$observable = '@@observable';
 }
 
-},{"../util/root":528}],521:[function(require,module,exports){
+},{"../util/root":531}],524:[function(require,module,exports){
 "use strict";
 var root_1 = require('../util/root');
 var Symbol = root_1.root.Symbol;
 exports.$$rxSubscriber = (typeof Symbol === 'function' && typeof Symbol.for === 'function') ?
     Symbol.for('rxSubscriber') : '@@rxSubscriber';
 
-},{"../util/root":528}],522:[function(require,module,exports){
+},{"../util/root":531}],525:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -86183,7 +86325,7 @@ var ObjectUnsubscribedError = (function (_super) {
 }(Error));
 exports.ObjectUnsubscribedError = ObjectUnsubscribedError;
 
-},{}],523:[function(require,module,exports){
+},{}],526:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -86206,30 +86348,30 @@ var UnsubscriptionError = (function (_super) {
 }(Error));
 exports.UnsubscriptionError = UnsubscriptionError;
 
-},{}],524:[function(require,module,exports){
+},{}],527:[function(require,module,exports){
 "use strict";
 // typeof any so that it we don't have to cast when comparing a result to the error object
 exports.errorObject = { e: {} };
 
-},{}],525:[function(require,module,exports){
+},{}],528:[function(require,module,exports){
 "use strict";
 exports.isArray = Array.isArray || (function (x) { return x && typeof x.length === 'number'; });
 
-},{}],526:[function(require,module,exports){
+},{}],529:[function(require,module,exports){
 "use strict";
 function isFunction(x) {
     return typeof x === 'function';
 }
 exports.isFunction = isFunction;
 
-},{}],527:[function(require,module,exports){
+},{}],530:[function(require,module,exports){
 "use strict";
 function isObject(x) {
     return x != null && typeof x === 'object';
 }
 exports.isObject = isObject;
 
-},{}],528:[function(require,module,exports){
+},{}],531:[function(require,module,exports){
 (function (global){
 "use strict";
 var objectTypes = {
@@ -86251,12 +86393,12 @@ if (freeGlobal && (freeGlobal.global === freeGlobal || freeGlobal.window === fre
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],529:[function(require,module,exports){
+},{}],532:[function(require,module,exports){
 "use strict";
 function throwError(e) { throw e; }
 exports.throwError = throwError;
 
-},{}],530:[function(require,module,exports){
+},{}],533:[function(require,module,exports){
 "use strict";
 var Subscriber_1 = require('../Subscriber');
 var rxSubscriber_1 = require('../symbol/rxSubscriber');
@@ -86273,7 +86415,7 @@ function toSubscriber(nextOrObserver, error, complete) {
 }
 exports.toSubscriber = toSubscriber;
 
-},{"../Subscriber":516,"../symbol/rxSubscriber":521}],531:[function(require,module,exports){
+},{"../Subscriber":516,"../symbol/rxSubscriber":524}],534:[function(require,module,exports){
 "use strict";
 var errorObject_1 = require('./errorObject');
 var tryCatchTarget;
@@ -86293,9 +86435,9 @@ function tryCatch(fn) {
 exports.tryCatch = tryCatch;
 ;
 
-},{"./errorObject":524}],532:[function(require,module,exports){
+},{"./errorObject":527}],535:[function(require,module,exports){
 
-},{}]},{},[1,532])
+},{}]},{},[1,535])
 
 
 //# sourceMappingURL=app.bundle.js.map

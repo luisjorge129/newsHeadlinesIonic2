@@ -1,51 +1,53 @@
-// import { Injectable }     from '@angular/core';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/toPromise';
+import { Observable } from 'rxjs/Observable';
+import { Injectable }     from '@angular/core';
 import { Http, Response, URLSearchParams } from '@angular/http';
-// import { Observable }     from 'rxjs/Observable';
 
-// import 'rxjs/add/operator/map';
-// import 'rxjs/add/operator/toPromise';
-
-// @Injectable()
+@Injectable()
 export class NewsHeadline {
-  constructor (private http: Http) {}
-  private newsUrl = 'https://newsapi.org/v1/';  // URL to web API
+    constructor(private http: Http) {
+    }
 
-  // getSources () {
-  //   var searchParams = new URLSearchParams();
+    private newsUrl = 'https://newsapi.org/v1/';  // URL to web API
 
-  //   searchParams.append('apiKey', 'f47ec438629b40af849f1d74828da59a');
+    getSources() {
+        var searchParams = new URLSearchParams();
 
-  //   console.log(this.newsUrl + "sources",
-  //           {search: searchParams});
+        searchParams.append('apiKey', 'f47ec438629b40af849f1d74828da59a');
 
-  //   return this.http.get(this.newsUrl + "sources",
-  //           {search: searchParams})
-  //           .toPromise()
-  //           .then(response => response.json().data);
-  //  }
+        console.log(this.newsUrl + "sources",
+            { search: searchParams });
 
-  //  getArticles(source) {
-  //   var searchParams = new URLSearchParams();
+        return this.http.get(this.newsUrl + "sources",
+            { search: searchParams })
+            .toPromise()
+            .then(response => response.json().data);
+    }
 
-  //   searchParams.append('apiKey', 'f47ec438629b40af849f1d74828da59a');
-  //   searchParams.append('source', source);
+    getArticles(source) {
+        var searchParams = new URLSearchParams();
 
-  //   return this.http.get(this.newsUrl + "articles",
-  //           { search: searchParams })
-  //           .toPromise()
-  //           .then(response => response.json().data);
-  //  }
+        searchParams.append('apiKey', 'f47ec438629b40af849f1d74828da59a');
+        searchParams.append('source', source);
 
-  // private extractData(res: Response) {
-  //   let body = res.json();
-  //   return body.data || { };
-  // }
-  // private handleError (error: any) {
-  //   // In a real world app, we might use a remote logging infrastructure
-  //   // We'd also dig deeper into the error to get a better message
-  //   let errMsg = (error.message) ? error.message :
-  //     error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-  //   console.error(errMsg); // log to console instead
-  //   return Observable.throw(errMsg);
-  // }
+        return this.http.get(this.newsUrl + "articles",
+            { search: searchParams })
+            .toPromise()
+            .then(response => response.json().data);
+    }
+
+    private extractData(res: Response) {
+        let body = res.json();
+
+        return body.data || {};
+    }
+
+    private handleError(error: any) {
+        let errMsg = (error.message) ? error.message :
+            error.status ? `${error.status} - ${error.statusText}` : 'Server error';
+        console.error(errMsg); // log to console instead
+
+        return Observable.throw(errMsg);
+    }
 }
