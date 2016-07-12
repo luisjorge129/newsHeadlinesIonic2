@@ -10,10 +10,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var ionic_angular_1 = require('ionic-angular');
 var ionic_native_1 = require('ionic-native');
 var tabs_1 = require('./pages/tabs/tabs');
 var http_1 = require('@angular/http');
+var ionic_angular_1 = require('ionic-angular');
+var newsHeadline_service_1 = require('./pages/home/newsHeadline.service');
 var MyApp = (function () {
     function MyApp(platform) {
         this.platform = platform;
@@ -26,7 +27,8 @@ var MyApp = (function () {
     }
     MyApp = __decorate([
         core_1.Component({
-            template: '<ion-nav [root]="rootPage"></ion-nav>'
+            template: '<ion-nav [root]="rootPage"></ion-nav>',
+            providers: [newsHeadline_service_1.NewsHeadlineService]
         }), 
         __metadata('design:paramtypes', [ionic_angular_1.Platform])
     ], MyApp);
@@ -35,7 +37,7 @@ var MyApp = (function () {
 exports.MyApp = MyApp;
 ionic_angular_1.ionicBootstrap(MyApp, [http_1.HTTP_PROVIDERS]);
 
-},{"./pages/tabs/tabs":7,"@angular/core":154,"@angular/http":242,"ionic-angular":418,"ionic-native":445}],2:[function(require,module,exports){
+},{"./pages/home/newsHeadline.service":6,"./pages/tabs/tabs":7,"@angular/core":154,"@angular/http":242,"ionic-angular":418,"ionic-native":445}],2:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -131,7 +133,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var newsHeadline_service_1 = require('../home/newsHeadline.service');
-var http_1 = require('@angular/http');
 var NewsList = (function () {
     function NewsList(newsHeadline) {
         this.newsHeadline = newsHeadline;
@@ -143,13 +144,13 @@ var NewsList = (function () {
             .subscribe(function (sourceList) {
             _this.sourceList = sourceList;
         });
+        console.log(this.sourceList);
     };
     NewsList = __decorate([
         core_1.Component({
             selector: 'source-list',
             templateUrl: 'build/pages/home/list.component.html',
             styleUrls: ['/home/list.component.css'],
-            providers: [newsHeadline_service_1.NewsHeadlineService, http_1.HTTP_PROVIDERS]
         }), 
         __metadata('design:paramtypes', [newsHeadline_service_1.NewsHeadlineService])
     ], NewsList);
@@ -157,7 +158,7 @@ var NewsList = (function () {
 }());
 exports.NewsList = NewsList;
 
-},{"../home/newsHeadline.service":6,"@angular/core":154,"@angular/http":242}],6:[function(require,module,exports){
+},{"../home/newsHeadline.service":6,"@angular/core":154}],6:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -170,7 +171,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var http_1 = require('@angular/http');
-// import { Observable }     from 'rxjs/Observable';
 require('rxjs/add/operator/map');
 require('rxjs/add/operator/toPromise');
 var NewsHeadlineService = (function () {
