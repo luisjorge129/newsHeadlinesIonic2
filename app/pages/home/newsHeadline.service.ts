@@ -50,5 +50,5 @@ export class NewsHeadlineService {
   // }
 
     private key: string;
-    private newsUrl = 'https://newsapi.org/v1/';
+    private newsUrl:string = 'https://newsapi.org/v1/';
 }

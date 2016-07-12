@@ -9,7 +9,7 @@ export class OtherPage {
     constructor (private newsHeadline: NewsHeadlineService,
     private nav: NavController) {}
 
-    sourceTitle = "Other Page";
+    sourceTitle: string = "Other Page";
     @Output('sourceArticle') sourceArticle = new EventEmitter();
 
     ngOnInit() {
