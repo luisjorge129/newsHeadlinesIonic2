@@ -26,8 +26,11 @@ export class SourceList {
         this.nav.push(sourceArticles, {
                 source: source,
                 sourceTitle: sourceTitle
+            },
+            {
+                animation: 'wp-transition',
+                direction: 'forward'
             }
-            // {direction: 'forward'}
         );
 
     }   
