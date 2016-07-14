@@ -7,8 +7,10 @@ import 'rxjs/add/operator/toPromise';
 @Injectable()
 export class NewsHeadlineService {
 
-    constructor (private http: Http, @Inject('apiKey') key) {
+    constructor (private http: Http, @Inject('apiKey') key,
+        @Inject('apiUrl') url) {
         this.key = key;
+        this.url = url;
     }
 
     getSources () {
@@ -16,7 +18,7 @@ export class NewsHeadlineService {
 
         searchParams.append('apiKey', this.key);
 
-        return this.http.get(this.newsUrl + "sources",
+        return this.http.get(this.url + "sources",
                 { search: searchParams })
                 .map(response => {
                     return response.json().sources
@@ -29,7 +31,7 @@ export class NewsHeadlineService {
         searchParams.append('apiKey', this.key);
         searchParams.append('source', source);
 
-        return this.http.get(this.newsUrl + "articles",
+        return this.http.get(this.url + "articles",
                 { search: searchParams })
                 .map(response => {
                     return response.json()
@@ -50,5 +52,5 @@ export class NewsHeadlineService {
   // }
 
     private key: string;
-    private newsUrl:string = 'https://newsapi.org/v1/';
+    private url: string;
 }

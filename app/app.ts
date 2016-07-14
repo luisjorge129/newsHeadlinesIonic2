@@ -9,7 +9,8 @@ import { NewsHeadlineService } from './pages/home/newsHeadline.service';
     template: '<ion-nav [root]="rootPage"></ion-nav>',
     providers: [
         NewsHeadlineService,
-        { provide: 'apiKey', useValue: 'f47ec438629b40af849f1d74828da59a' }]
+        { provide: 'apiKey', useValue: 'f47ec438629b40af849f1d74828da59a' },
+        { provide: 'apiUrl', useValue: 'https://newsapi.org/v1/' }]
 })
 export class MyApp {
 
