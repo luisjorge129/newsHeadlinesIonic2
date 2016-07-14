@@ -30,7 +30,8 @@ var MyApp = (function () {
             template: '<ion-nav [root]="rootPage"></ion-nav>',
             providers: [
                 newsHeadline_service_1.NewsHeadlineService,
-                { provide: 'apiKey', useValue: 'f47ec438629b40af849f1d74828da59a' }]
+                { provide: 'apiKey', useValue: 'f47ec438629b40af849f1d74828da59a' },
+                { provide: 'apiUrl', useValue: 'https://newsapi.org/v1/' }]
         }), 
         __metadata('design:paramtypes', [ionic_angular_1.Platform])
     ], MyApp);
@@ -39,7 +40,7 @@ var MyApp = (function () {
 exports.MyApp = MyApp;
 ionic_angular_1.ionicBootstrap(MyApp, [http_1.HTTP_PROVIDERS]);
 
-},{"./pages/home/newsHeadline.service":6,"./pages/tabs/tabs":7,"@angular/core":154,"@angular/http":242,"ionic-angular":418,"ionic-native":445}],2:[function(require,module,exports){
+},{"./pages/home/newsHeadline.service":5,"./pages/tabs/tabs":7,"@angular/core":154,"@angular/http":242,"ionic-angular":418,"ionic-native":445}],2:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -79,33 +80,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var ionic_angular_1 = require('ionic-angular');
-var ContactPage = (function () {
-    function ContactPage(navController) {
-        this.navController = navController;
-    }
-    ContactPage = __decorate([
-        core_1.Component({
-            templateUrl: 'build/pages/contact/contact.html'
-        }), 
-        __metadata('design:paramtypes', [ionic_angular_1.NavController])
-    ], ContactPage);
-    return ContactPage;
-}());
-exports.ContactPage = ContactPage;
-
-},{"@angular/core":154,"ionic-angular":418}],4:[function(require,module,exports){
-"use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var core_1 = require('@angular/core');
-var ionic_angular_1 = require('ionic-angular');
 var list_component_1 = require('../home/list.component');
 var HomePage = (function () {
     function HomePage(navController) {
@@ -113,7 +87,7 @@ var HomePage = (function () {
     }
     HomePage = __decorate([
         core_1.Component({
-            directives: [list_component_1.NewsList],
+            directives: [list_component_1.SourceList],
             templateUrl: 'build/pages/home/home.html'
         }), 
         __metadata('design:paramtypes', [ionic_angular_1.NavController])
@@ -122,7 +96,7 @@ var HomePage = (function () {
 }());
 exports.HomePage = HomePage;
 
-},{"../home/list.component":5,"@angular/core":154,"ionic-angular":418}],5:[function(require,module,exports){
+},{"../home/list.component":4,"@angular/core":154,"ionic-angular":418}],4:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -135,32 +109,43 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var newsHeadline_service_1 = require('../home/newsHeadline.service');
-var NewsList = (function () {
-    function NewsList(newsHeadline) {
+var ionic_angular_1 = require('ionic-angular');
+var sourceDetail_component_1 = require('../home/sourceDetail.component');
+var SourceList = (function () {
+    function SourceList(newsHeadline, nav) {
         this.newsHeadline = newsHeadline;
+        this.nav = nav;
         this.sourceList = [];
+        this.articleList = [];
     }
-    NewsList.prototype.ngOnInit = function () {
+    SourceList.prototype.ngOnInit = function () {
         var _this = this;
         this.newsHeadline.getSources()
             .subscribe(function (sourceList) {
             _this.sourceList = sourceList;
         });
-        console.log(this.sourceList);
     };
-    NewsList = __decorate([
+    SourceList.prototype.sourceArticle = function (source, sourceTitle) {
+        this.nav.push(sourceDetail_component_1.sourceArticles, {
+            source: source,
+            sourceTitle: sourceTitle
+        }, {
+            animation: 'wp-transition',
+            direction: 'forward'
+        });
+    };
+    SourceList = __decorate([
         core_1.Component({
             selector: 'source-list',
             templateUrl: 'build/pages/home/list.component.html',
-            styleUrls: ['/home/list.component.css'],
         }), 
-        __metadata('design:paramtypes', [newsHeadline_service_1.NewsHeadlineService])
-    ], NewsList);
-    return NewsList;
+        __metadata('design:paramtypes', [newsHeadline_service_1.NewsHeadlineService, ionic_angular_1.NavController])
+    ], SourceList);
+    return SourceList;
 }());
-exports.NewsList = NewsList;
+exports.SourceList = SourceList;
 
-},{"../home/newsHeadline.service":6,"@angular/core":154}],6:[function(require,module,exports){
+},{"../home/newsHeadline.service":5,"../home/sourceDetail.component":6,"@angular/core":154,"ionic-angular":418}],5:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -179,15 +164,15 @@ var http_1 = require('@angular/http');
 require('rxjs/add/operator/map');
 require('rxjs/add/operator/toPromise');
 var NewsHeadlineService = (function () {
-    function NewsHeadlineService(http, key) {
+    function NewsHeadlineService(http, key, url) {
         this.http = http;
-        this.newsUrl = 'https://newsapi.org/v1/';
         this.key = key;
+        this.url = url;
     }
     NewsHeadlineService.prototype.getSources = function () {
         var searchParams = new http_1.URLSearchParams();
         searchParams.append('apiKey', this.key);
-        return this.http.get(this.newsUrl + "sources", { search: searchParams })
+        return this.http.get(this.url + "sources", { search: searchParams })
             .map(function (response) {
             return response.json().sources;
         });
@@ -196,21 +181,96 @@ var NewsHeadlineService = (function () {
         var searchParams = new http_1.URLSearchParams();
         searchParams.append('apiKey', this.key);
         searchParams.append('source', source);
-        return this.http.get(this.newsUrl + "articles", { search: searchParams })
+        return this.http.get(this.url + "articles", { search: searchParams })
             .map(function (response) {
-            return response.json().articles;
+            return response.json();
         });
     };
     NewsHeadlineService = __decorate([
         core_1.Injectable(),
-        __param(1, core_1.Inject('apiKey')), 
-        __metadata('design:paramtypes', [http_1.Http, Object])
+        __param(1, core_1.Inject('apiKey')),
+        __param(2, core_1.Inject('apiUrl')), 
+        __metadata('design:paramtypes', [http_1.Http, Object, Object])
     ], NewsHeadlineService);
     return NewsHeadlineService;
 }());
 exports.NewsHeadlineService = NewsHeadlineService;
 
-},{"@angular/core":154,"@angular/http":242,"rxjs/add/operator/map":518,"rxjs/add/operator/toPromise":519}],7:[function(require,module,exports){
+},{"@angular/core":154,"@angular/http":242,"rxjs/add/operator/map":520,"rxjs/add/operator/toPromise":521}],6:[function(require,module,exports){
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var core_1 = require('@angular/core');
+var newsHeadline_service_1 = require('../home/newsHeadline.service');
+var ionic_angular_1 = require('ionic-angular');
+var ionic_native_1 = require('ionic-native');
+var sourceArticles = (function () {
+    function sourceArticles(newsHeadline, nav, params) {
+        this.newsHeadline = newsHeadline;
+        this.nav = nav;
+        this.params = params;
+        this.articleList = [];
+        this.sourceTitle = "";
+    }
+    sourceArticles.prototype.ngOnInit = function () {
+        var _this = this;
+        event.preventDefault();
+        var source = this.params.get('source');
+        this.sourceTitle = this.params.get('sourceTitle');
+        this.newsHeadline.getArticles(source)
+            .subscribe(function (articleList) {
+            _this.articleList = articleList;
+        });
+    };
+    sourceArticles.prototype.goBack = function () {
+        this.nav.pop();
+    };
+    sourceArticles.prototype.openArticle = function (articleUrl) {
+        ionic_native_1.SafariViewController.isAvailable()
+            .then(function (available) {
+            if (available) {
+                console.log("Is Available");
+                ionic_native_1.SafariViewController.show({
+                    url: articleUrl,
+                    hidden: false,
+                    animated: false,
+                    transition: 'curl',
+                    enterReaderModeIfAvailable: true,
+                    tintColor: '#ff0000'
+                })
+                    .then(function (result) {
+                    if (result.event === 'opened')
+                        console.log("Opened");
+                    else if (result.event === 'loaded')
+                        console.log("Loaded");
+                    else if (result.event === 'closed')
+                        console.log("Closed");
+                    console.log("Successfully open...");
+                }, function (error) { return console.error(error); });
+            }
+            else {
+                console.warn("Safari view controller is not working.");
+            }
+        });
+    };
+    sourceArticles = __decorate([
+        core_1.Component({
+            templateUrl: 'build/pages/home/sourceDetail.component.html'
+        }), 
+        __metadata('design:paramtypes', [newsHeadline_service_1.NewsHeadlineService, ionic_angular_1.NavController, ionic_angular_1.NavParams])
+    ], sourceArticles);
+    return sourceArticles;
+}());
+exports.sourceArticles = sourceArticles;
+
+},{"../home/newsHeadline.service":5,"@angular/core":154,"ionic-angular":418,"ionic-native":445}],7:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -224,14 +284,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var home_1 = require('../home/home');
 var about_1 = require('../about/about');
-var contact_1 = require('../contact/contact');
 var TabsPage = (function () {
+    // private tab3Root: any;
     function TabsPage() {
         // this tells the tabs component which Pages
         // should be each tab's root Page
         this.tab1Root = home_1.HomePage;
         this.tab2Root = about_1.AboutPage;
-        this.tab3Root = contact_1.ContactPage;
+        // this.tab3Root = ContactPage;
     }
     TabsPage = __decorate([
         core_1.Component({
@@ -243,7 +303,7 @@ var TabsPage = (function () {
 }());
 exports.TabsPage = TabsPage;
 
-},{"../about/about":2,"../contact/contact":3,"../home/home":4,"@angular/core":154}],8:[function(require,module,exports){
+},{"../about/about":2,"../home/home":3,"@angular/core":154}],8:[function(require,module,exports){
 "use strict";
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
@@ -1265,7 +1325,7 @@ var EventEmitter = (function (_super) {
 }(Subject_1.Subject));
 exports.EventEmitter = EventEmitter;
 
-},{"./lang":25,"./promise":26,"rxjs/Observable":512,"rxjs/Subject":514,"rxjs/observable/PromiseObservable":520,"rxjs/operator/toPromise":522}],20:[function(require,module,exports){
+},{"./lang":25,"./promise":26,"rxjs/Observable":514,"rxjs/Subject":516,"rxjs/observable/PromiseObservable":522,"rxjs/operator/toPromise":524}],20:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -10194,7 +10254,7 @@ var SimpleExpressionChecker = (function () {
 
 },{"../facade/collection":92,"../facade/exceptions":94,"../facade/lang":95,"../interpolation_config":109,"./ast":87,"./lexer":88,"@angular/core":154}],90:[function(require,module,exports){
 arguments[4][19][0].apply(exports,arguments)
-},{"./lang":95,"./promise":97,"dup":19,"rxjs/Observable":512,"rxjs/Subject":514,"rxjs/observable/PromiseObservable":520,"rxjs/operator/toPromise":522}],91:[function(require,module,exports){
+},{"./lang":95,"./promise":97,"dup":19,"rxjs/Observable":514,"rxjs/Subject":516,"rxjs/observable/PromiseObservable":522,"rxjs/operator/toPromise":524}],91:[function(require,module,exports){
 arguments[4][20][0].apply(exports,arguments)
 },{"dup":20}],92:[function(require,module,exports){
 arguments[4][21][0].apply(exports,arguments)
@@ -28434,7 +28494,7 @@ function _createDependency(token /** TODO #9100 */, optional /** TODO #9100 */, 
 
 },{"../facade/collection":195,"../facade/lang":198,"../reflection/reflection":228,"./forward_ref":183,"./metadata":185,"./provider":187,"./provider_util":188,"./reflective_exceptions":189,"./reflective_key":191}],193:[function(require,module,exports){
 arguments[4][19][0].apply(exports,arguments)
-},{"./lang":198,"./promise":200,"dup":19,"rxjs/Observable":512,"rxjs/Subject":514,"rxjs/observable/PromiseObservable":520,"rxjs/operator/toPromise":522}],194:[function(require,module,exports){
+},{"./lang":198,"./promise":200,"dup":19,"rxjs/Observable":514,"rxjs/Subject":516,"rxjs/observable/PromiseObservable":522,"rxjs/operator/toPromise":524}],194:[function(require,module,exports){
 arguments[4][20][0].apply(exports,arguments)
 },{"dup":20}],195:[function(require,module,exports){
 arguments[4][21][0].apply(exports,arguments)
@@ -35888,7 +35948,7 @@ var JSONPBackend_ = (function (_super) {
 }(JSONPBackend));
 exports.JSONPBackend_ = JSONPBackend_;
 
-},{"../base_response_options":248,"../enums":249,"../facade/exceptions":253,"../facade/lang":254,"../interfaces":258,"../static_response":260,"./browser_jsonp":243,"@angular/core":154,"rxjs/Observable":512}],246:[function(require,module,exports){
+},{"../base_response_options":248,"../enums":249,"../facade/exceptions":253,"../facade/lang":254,"../interfaces":258,"../static_response":260,"./browser_jsonp":243,"@angular/core":154,"rxjs/Observable":514}],246:[function(require,module,exports){
 "use strict";
 var core_1 = require('@angular/core');
 var platform_browser_1 = require('@angular/platform-browser');
@@ -36059,7 +36119,7 @@ var XHRBackend = (function () {
 }());
 exports.XHRBackend = XHRBackend;
 
-},{"../base_response_options":248,"../enums":249,"../facade/lang":254,"../headers":255,"../http_utils":257,"../interfaces":258,"../static_response":260,"./browser_xhr":244,"@angular/core":154,"@angular/platform-browser":274,"rxjs/Observable":512}],247:[function(require,module,exports){
+},{"../base_response_options":248,"../enums":249,"../facade/lang":254,"../headers":255,"../http_utils":257,"../interfaces":258,"../static_response":260,"./browser_xhr":244,"@angular/core":154,"@angular/platform-browser":274,"rxjs/Observable":514}],247:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -37643,7 +37703,7 @@ exports.bootstrapWorkerApp = bootstrapWorkerApp;
 
 },{"./core_private":262,"./src/facade/async":264,"./src/facade/lang":269,"./src/xhr/xhr_cache":271,"./src/xhr/xhr_impl":272,"@angular/common":8,"@angular/compiler":73,"@angular/core":154,"@angular/platform-browser":274}],264:[function(require,module,exports){
 arguments[4][19][0].apply(exports,arguments)
-},{"./lang":269,"./promise":270,"dup":19,"rxjs/Observable":512,"rxjs/Subject":514,"rxjs/observable/PromiseObservable":520,"rxjs/operator/toPromise":522}],265:[function(require,module,exports){
+},{"./lang":269,"./promise":270,"dup":19,"rxjs/Observable":514,"rxjs/Subject":516,"rxjs/observable/PromiseObservable":522,"rxjs/operator/toPromise":524}],265:[function(require,module,exports){
 arguments[4][20][0].apply(exports,arguments)
 },{"dup":20}],266:[function(require,module,exports){
 arguments[4][21][0].apply(exports,arguments)
@@ -40237,7 +40297,7 @@ exports.WebAnimationsPlayer = WebAnimationsPlayer;
 
 },{"../facade/lang":305}],299:[function(require,module,exports){
 arguments[4][19][0].apply(exports,arguments)
-},{"./lang":305,"./promise":306,"dup":19,"rxjs/Observable":512,"rxjs/Subject":514,"rxjs/observable/PromiseObservable":520,"rxjs/operator/toPromise":522}],300:[function(require,module,exports){
+},{"./lang":305,"./promise":306,"dup":19,"rxjs/Observable":514,"rxjs/Subject":516,"rxjs/observable/PromiseObservable":522,"rxjs/operator/toPromise":524}],300:[function(require,module,exports){
 arguments[4][20][0].apply(exports,arguments)
 },{"dup":20}],301:[function(require,module,exports){
 "use strict";
@@ -75767,6 +75827,7 @@ exports.AppVersion = appversion_1.AppVersion;
 var badge_1 = require('./plugins/badge');
 exports.Badge = badge_1.Badge;
 var background_geolocation_1 = require('./plugins/background-geolocation');
+var backgroundmode_1 = require('./plugins/backgroundmode');
 var barcodescanner_1 = require('./plugins/barcodescanner');
 exports.BarcodeScanner = barcodescanner_1.BarcodeScanner;
 var base64togallery_1 = require('./plugins/base64togallery');
@@ -75821,6 +75882,7 @@ exports.GoogleAnalytics = googleanalytics_1.GoogleAnalytics;
 var hotspot_1 = require('./plugins/hotspot');
 exports.Hotspot = hotspot_1.Hotspot;
 var httpd_1 = require('./plugins/httpd');
+var ibeacon_1 = require('./plugins/ibeacon');
 var imagepicker_1 = require('./plugins/imagepicker');
 var inappbrowser_1 = require('./plugins/inappbrowser');
 var insomnia_1 = require('./plugins/insomnia');
@@ -75832,7 +75894,8 @@ var localnotifications_1 = require('./plugins/localnotifications');
 var media_1 = require('./plugins/media');
 var network_1 = require('./plugins/network');
 exports.Network = network_1.Network;
-exports.Connection = network_1.Connection;
+var onesignal_1 = require('./plugins/onesignal');
+exports.OneSignal = onesignal_1.OneSignal;
 var printer_1 = require('./plugins/printer');
 var push_1 = require('./plugins/push');
 var safari_view_controller_1 = require('./plugins/safari-view-controller');
@@ -75868,8 +75931,10 @@ __export(require('./plugins/datepicker'));
 __export(require('./plugins/device'));
 __export(require('./plugins/devicemotion'));
 __export(require('./plugins/deviceorientation'));
+__export(require('./plugins/filetransfer'));
 __export(require('./plugins/googlemaps'));
 __export(require('./plugins/httpd'));
+__export(require('./plugins/ibeacon'));
 __export(require('./plugins/imagepicker'));
 __export(require('./plugins/inappbrowser'));
 __export(require('./plugins/launchnavigator'));
@@ -75891,6 +75956,7 @@ window['IonicNative'] = {
     AppVersion: appversion_1.AppVersion,
     Badge: badge_1.Badge,
     BackgroundGeolocation: background_geolocation_1.BackgroundGeolocation,
+    BackgroundMode: backgroundmode_1.BackgroundMode,
     BarcodeScanner: barcodescanner_1.BarcodeScanner,
     Base64ToGallery: base64togallery_1.Base64ToGallery,
     BatteryStatus: batterystatus_1.BatteryStatus,
@@ -75901,7 +75967,6 @@ window['IonicNative'] = {
     Camera: camera_1.Camera,
     CardIO: card_io_1.CardIO,
     Clipboard: clipboard_1.Clipboard,
-    Connection: network_1.Connection,
     Contacts: contacts_1.Contacts,
     DatePicker: datepicker_1.DatePicker,
     DBMeter: dbmeter_1.DBMeter,
@@ -75923,6 +75988,7 @@ window['IonicNative'] = {
     GoogleAnalytics: googleanalytics_1.GoogleAnalytics,
     Hotspot: hotspot_1.Hotspot,
     Httpd: httpd_1.Httpd,
+    IBeacon: ibeacon_1.IBeacon,
     ImagePicker: imagepicker_1.ImagePicker,
     InAppBrowser: inappbrowser_1.InAppBrowser,
     Keyboard: keyboard_1.Keyboard,
@@ -75932,6 +75998,7 @@ window['IonicNative'] = {
     Network: network_1.Network,
     Printer: printer_1.Printer,
     Push: push_1.Push,
+    OneSignal: onesignal_1.OneSignal,
     SafariViewController: safari_view_controller_1.SafariViewController,
     Screenshot: screenshot_1.Screenshot,
     SMS: sms_1.SMS,
@@ -75964,7 +76031,7 @@ setTimeout(function () {
     }
 }, DEVICE_READY_TIMEOUT);
 
-},{"./ng1":446,"./plugins/3dtouch":447,"./plugins/actionsheet":448,"./plugins/admob":449,"./plugins/appavailability":450,"./plugins/apprate":451,"./plugins/appversion":452,"./plugins/background-geolocation":453,"./plugins/backgroundmode":454,"./plugins/badge":455,"./plugins/barcodescanner":456,"./plugins/base64togallery":457,"./plugins/batterystatus":458,"./plugins/ble":459,"./plugins/bluetoothserial":460,"./plugins/brightness":461,"./plugins/calendar":462,"./plugins/camera":463,"./plugins/card-io":464,"./plugins/clipboard":465,"./plugins/contacts":466,"./plugins/datepicker":467,"./plugins/dbmeter":468,"./plugins/deeplinks":469,"./plugins/device":470,"./plugins/deviceaccounts":471,"./plugins/devicemotion":472,"./plugins/deviceorientation":473,"./plugins/diagnostic":474,"./plugins/dialogs":475,"./plugins/emailcomposer":476,"./plugins/facebook":477,"./plugins/file":478,"./plugins/filetransfer":479,"./plugins/flashlight":480,"./plugins/geolocation":481,"./plugins/globalization":482,"./plugins/google-plus":483,"./plugins/googleanalytics":484,"./plugins/googlemaps":485,"./plugins/hotspot":486,"./plugins/httpd":487,"./plugins/imagepicker":488,"./plugins/inappbrowser":489,"./plugins/insomnia":490,"./plugins/keyboard":491,"./plugins/launchnavigator":492,"./plugins/localnotifications":493,"./plugins/media":494,"./plugins/network":495,"./plugins/plugin":496,"./plugins/printer":497,"./plugins/push":498,"./plugins/safari-view-controller":499,"./plugins/screenshot":500,"./plugins/sms":501,"./plugins/socialsharing":502,"./plugins/spinnerdialog":503,"./plugins/splashscreen":504,"./plugins/sqlite":505,"./plugins/statusbar":506,"./plugins/toast":507,"./plugins/touchid":508,"./plugins/vibration":509,"./plugins/webintent":510}],446:[function(require,module,exports){
+},{"./ng1":446,"./plugins/3dtouch":447,"./plugins/actionsheet":448,"./plugins/admob":449,"./plugins/appavailability":450,"./plugins/apprate":451,"./plugins/appversion":452,"./plugins/background-geolocation":453,"./plugins/backgroundmode":454,"./plugins/badge":455,"./plugins/barcodescanner":456,"./plugins/base64togallery":457,"./plugins/batterystatus":458,"./plugins/ble":459,"./plugins/bluetoothserial":460,"./plugins/brightness":461,"./plugins/calendar":462,"./plugins/camera":463,"./plugins/card-io":464,"./plugins/clipboard":465,"./plugins/contacts":466,"./plugins/datepicker":467,"./plugins/dbmeter":468,"./plugins/deeplinks":469,"./plugins/device":470,"./plugins/deviceaccounts":471,"./plugins/devicemotion":472,"./plugins/deviceorientation":473,"./plugins/diagnostic":474,"./plugins/dialogs":475,"./plugins/emailcomposer":476,"./plugins/facebook":477,"./plugins/file":478,"./plugins/filetransfer":479,"./plugins/flashlight":480,"./plugins/geolocation":481,"./plugins/globalization":482,"./plugins/google-plus":483,"./plugins/googleanalytics":484,"./plugins/googlemaps":485,"./plugins/hotspot":486,"./plugins/httpd":487,"./plugins/ibeacon":488,"./plugins/imagepicker":489,"./plugins/inappbrowser":490,"./plugins/insomnia":491,"./plugins/keyboard":492,"./plugins/launchnavigator":493,"./plugins/localnotifications":494,"./plugins/media":495,"./plugins/network":496,"./plugins/onesignal":497,"./plugins/plugin":498,"./plugins/printer":499,"./plugins/push":500,"./plugins/safari-view-controller":501,"./plugins/screenshot":502,"./plugins/sms":503,"./plugins/socialsharing":504,"./plugins/spinnerdialog":505,"./plugins/splashscreen":506,"./plugins/sqlite":507,"./plugins/statusbar":508,"./plugins/toast":509,"./plugins/touchid":510,"./plugins/vibration":511,"./plugins/webintent":512}],446:[function(require,module,exports){
 "use strict";
 /**
  * Initialize the ionic.native Angular module if we're running in ng1.
@@ -76008,8 +76075,10 @@ var Observable_1 = require('rxjs/Observable');
  * @usage
  * Please do refer to the original plugin's repo for detailed usage. The usage example here might not be sufficient.
  * ```
- * import {ThreeDeeTouch, ThreeDeeTouchQuickAction, ThreeDeeTouchForceTouch} from 'ionic-native';
+ * import {ThreeDeeTouch} from 'ionic-native';
  *
+ * // import for type completion on variables
+ * import {ThreeDeeTouchQuickAction, ThreeDeeTouchForceTouch} from 'ionic-native';
  * ...
  *
  * ThreeDeeTouch.isAvailable().then(isAvailable => console.log("3D Touch available? " + isAvailable)):
@@ -76049,6 +76118,15 @@ var Observable_1 = require('rxjs/Observable');
  *   }
  * ];
  * ThreeDeeTouch.configureQuickActions(actions);
+ *
+ * ThreeDeeTouchForceTouch.onHomeIconPressed().subscribe(
+ *  (payload) => {
+ *    // returns an object that is the button you presed
+ *    console.log(`Pressed the ${payload.title} button`)
+ *    console.log(payload.type)
+ *
+ *  }
+ * )
  * ```
  */
 var ThreeDeeTouch = (function () {
@@ -76064,6 +76142,13 @@ var ThreeDeeTouch = (function () {
      * @returns {Observable<ThreeDeeTouchForceTouch>} Returns an observable that sends a `ThreeDeeTouchForceTouch` object
      */
     ThreeDeeTouch.watchForceTouches = function () { return; };
+    /**
+     * setup the 3D-touch actions, takes an array of objects with the following
+     * @param {string} type (optional) A type that can be used `onHomeIconPressed` callback
+     * @param {string} title Title for your action
+     * @param {string} subtitle (optional) A short description for your action
+     * @param {string} iconType (optional) Choose between Prohibit, Contact, Home, MarkLocation, Favorite, Love, Cloud, Invitation, Confirmation, Mail, Message, Date, Time, CapturePhoto, CaptureVideo, Task, TaskCompleted, Alarm, Bookmark, Shuffle, Audio, Update
+     */
     ThreeDeeTouch.configureQuickActions = function (quickActions) { };
     /**
      * When a home icon is pressed, your app launches and this JS callback is invoked.
@@ -76080,6 +76165,7 @@ var ThreeDeeTouch = (function () {
         });
     };
     /**
+     * Enable Link Preview.
      * UIWebView and WKWebView (the webviews powering Cordova apps) don't allow the fancy new link preview feature of iOS9.
      */
     ThreeDeeTouch.enableLinkPreview = function () { };
@@ -76102,11 +76188,6 @@ var ThreeDeeTouch = (function () {
     ], ThreeDeeTouch, "configureQuickActions", null);
     __decorate([
         plugin_1.Cordova({
-            observable: true
-        })
-    ], ThreeDeeTouch, "onHomeIconPressed", null);
-    __decorate([
-        plugin_1.Cordova({
             sync: true
         })
     ], ThreeDeeTouch, "enableLinkPreview", null);
@@ -76127,7 +76208,7 @@ var ThreeDeeTouch = (function () {
 }());
 exports.ThreeDeeTouch = ThreeDeeTouch;
 
-},{"./plugin":496,"rxjs/Observable":512}],448:[function(require,module,exports){
+},{"./plugin":498,"rxjs/Observable":514}],448:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -76158,33 +76239,37 @@ var plugin_1 = require('./plugin');
  * });
  * ```
  *
+ * @advanced
+ * ActionSheet options
+ *
+ * | Option                        | Type      | Description                                  |
+ * |-------------------------------|-----------|----------------------------------------------|
+ * | title                         |`string`   | The title for the actionsheet                |
+ * | buttonLabels                  |`string[]` | the labels for the buttons. Uses the index x |
+ * | androidTheme                  |`number`   | Theme to be used on Android                  |
+ * | androidEnableCancelButton     |`boolean`  | Enable a cancel on Android                   |
+ * | winphoneEnableCancelButton    |`boolean`  | Enable a cancel on Windows Phone             |
+ * | addCancelButtonWithLabel      |`string`   | Add a cancel button with text                |
+ * | addDestructiveButtonWithLabel |`string`   | Add a destructive button with text           |
+ * | position                      |`number[]` | On an iPad, set the X,Y position             |
+ *
+ *
  */
 var ActionSheet = (function () {
     function ActionSheet() {
     }
     /**
-     * Show the ActionSheet. The ActionSheet's options is an object with the following propterties.
-     *
-     * | Option                        | Type      | Description                                  |
-     * |-------------------------------|-----------|----------------------------------------------|
-     * | title                         |`string`   | The title for the actionsheet                |
-     * | buttonLabels                  |`string[]` | the labels for the buttons. Uses the index x |
-     * | androidTheme                  |`number`   | Theme to be used on Android                  |
-     * | androidEnableCancelButton     |`boolean`  | Enable a cancel on Android                   |
-     * | winphoneEnableCancelButton    |`boolean`  | Enable a cancel on Windows Phone             |
-     * | addCancelButtonWithLabel      |`string`   | Add a cancel button with text                |
-     * | addDestructiveButtonWithLabel |`string`   | Add a destructive button with text           |
-     * | position                      |`number[]` | On an iPad, set the X,Y position             |
-     *
-     * @param {options} Options See table above
+     * Show a native ActionSheet component. See below for options.
+     * @param {options} Options See table below
      * @returns {Promise} Returns a Promise that resolves with the index of the
      *   button pressed (1 based, so 1, 2, 3, etc.)
      */
     ActionSheet.show = function (options) { return; };
     /**
-     * Hide the ActionSheet.
+     * Progamtically hide the native ActionSheet
+     * @returns {Promise} Returns a Promise that resolves when the actionsheet is closed
      */
-    ActionSheet.hide = function () { return; };
+    ActionSheet.hide = function (options) { return; };
     __decorate([
         plugin_1.Cordova()
     ], ActionSheet, "show", null);
@@ -76203,7 +76288,7 @@ var ActionSheet = (function () {
 }());
 exports.ActionSheet = ActionSheet;
 
-},{"./plugin":496}],449:[function(require,module,exports){
+},{"./plugin":498}],449:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -76409,7 +76494,7 @@ var AdMob = (function () {
 }());
 exports.AdMob = AdMob;
 
-},{"./plugin":496}],450:[function(require,module,exports){
+},{"./plugin":498}],450:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -76450,7 +76535,7 @@ var AppAvailability = (function () {
     }
     /**
      * Checks if an app is available on device
-     * @param app Package name on android, or URI scheme on iOS
+     * @param {string} app Package name on android, or URI scheme on iOS
      * @returns {Promise<boolean>}
      */
     AppAvailability.check = function (app) { return; };
@@ -76469,7 +76554,7 @@ var AppAvailability = (function () {
 }());
 exports.AppAvailability = AppAvailability;
 
-},{"./plugin":496}],451:[function(require,module,exports){
+},{"./plugin":498}],451:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -76496,30 +76581,35 @@ var plugin_1 = require('./plugin');
  * AppRate.preferences.storeAppURL.windows8 = 'ms-windows-store:Review?name=<the Package Family Name of the application>';
  * AppRate.promptForRating();
  * ```
+ *
+ * @advanced
+ *
+ * Rating dialog preferences
+ *
+ * | Option                       | Type       | Default | Description                                                                            |
+ * |------------------------------|------------|---------|----------------------------------------------------------------------------------------|
+ * | useLanguage                  | `String`   | null    | custom BCP 47 language tag                                                             |
+ * | displayAppName               | `String`   | ''      | custom application title                                                               |
+ * | promptAgainForEachNewVersion | `Boolean`  | true    | show dialog again when application version will be updated                             |
+ * | usesUntilPrompt              | `Integer`  | 3       | count of runs of application before dialog will be displayed                           |
+ * | openStoreInApp               | `Boolean`  | false   | leave app or no when application page opened in app store (now supported only for iOS) |
+ * | useCustomRateDialog          | `Boolean`  | false   | use custom view for rate dialog                                                        |
+ * | callbacks.onButtonClicked    | `Function` | null    | call back function. called when user clicked on rate-dialog buttons                    |
+ * | callbacks.onRateDialogShow   | `Function` | null    | call back function. called when rate-dialog showing                                    |
+ * | storeAppURL.ios              | `String`   | null    | application id in AppStore                                                             |
+ * | storeAppURL.android          | `String`   | null    | application URL in GooglePlay                                                          |
+ * | storeAppURL.blackberry       | `String`   | null    | application URL in AppWorld                                                            |
+ * | storeAppURL.windows8         | `String`   | null    | application URL in WindowsStore                                                        |
+ * | customLocale                 | `Object`   | null    | custom locale object                                                                   |
+
  */
 var AppRate = (function () {
     function AppRate() {
     }
     Object.defineProperty(AppRate, "preferences", {
         /**
-         * Rating dialog preferences
-         *
-         * | Option                       | Type       | Default | Description                                                                            |
-         * |------------------------------|------------|---------|----------------------------------------------------------------------------------------|
-         * | useLanguage                  | `String`   | null    | custom BCP 47 language tag                                                             |
-         * | displayAppName               | `String`   | ''      | custom application title                                                               |
-         * | promptAgainForEachNewVersion | `Boolean`  | true    | show dialog again when application version will be updated                             |
-         * | usesUntilPrompt              | `Integer`  | 3       | count of runs of application before dialog will be displayed                           |
-         * | openStoreInApp               | `Boolean`  | false   | leave app or no when application page opened in app store (now supported only for iOS) |
-         * | useCustomRateDialog          | `Boolean`  | false   | use custom view for rate dialog                                                        |
-         * | callbacks.onButtonClicked    | `Function` | null    | call back function. called when user clicked on rate-dialog buttons                    |
-         * | callbacks.onRateDialogShow   | `Function` | null    | call back function. called when rate-dialog showing                                    |
-         * | storeAppURL.ios              | `String`   | null    | application id in AppStore                                                             |
-         * | storeAppURL.android          | `String`   | null    | application URL in GooglePlay                                                          |
-         * | storeAppURL.blackberry       | `String`   | null    | application URL in AppWorld                                                            |
-         * | storeAppURL.windows8         | `String`   | null    | application URL in WindowsStore                                                        |
-         * | customLocale                 | `Object`   | null    | custom locale object                                                                   |
-         * @type {{}}
+         * Configure various settings for the Rating View.
+         * See table below for options
          */
         get: function () { return window.AppRate.preferences; },
         enumerable: true,
@@ -76527,7 +76617,6 @@ var AppRate = (function () {
     });
     /**
      * Prompts the user for rating
-     *
      * @param {boolean} immediately  Show the rating prompt immediately.
      */
     AppRate.promptForRating = function (immediately) { };
@@ -76550,7 +76639,7 @@ var AppRate = (function () {
 }());
 exports.AppRate = AppRate;
 
-},{"./plugin":496}],452:[function(require,module,exports){
+},{"./plugin":498}],452:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -76624,7 +76713,7 @@ var AppVersion = (function () {
 }());
 exports.AppVersion = AppVersion;
 
-},{"./plugin":496}],453:[function(require,module,exports){
+},{"./plugin":498}],453:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -76822,7 +76911,7 @@ var BackgroundGeolocation = (function () {
     BackgroundGeolocation = __decorate([
         plugin_1.Plugin({
             plugin: 'cordova-plugin-mauron85-background-geolocation',
-            pluginRef: 'plugins.backgroundGeoLocation',
+            pluginRef: 'backgroundGeolocation',
             repo: 'https://github.com/mauron85/cordova-plugin-background-geolocation',
             platforms: ['iOS', 'Android', 'Windows Phone 8']
         })
@@ -76831,7 +76920,7 @@ var BackgroundGeolocation = (function () {
 }());
 exports.BackgroundGeolocation = BackgroundGeolocation;
 
-},{"./plugin":496}],454:[function(require,module,exports){
+},{"./plugin":498}],454:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -76851,6 +76940,19 @@ var plugin_1 = require('./plugin');
 *
 * BackgroundMode.enable();
 * ```
+*
+* @advanced
+*
+* Configuration options
+*
+* | Property | Type      | Description                                                                  |
+* |----------|-----------|------------------------------------------------------------------------------|
+* | title    | `string`  | Title of the background task. Optional                                       |
+* | ticker   | `string`  | The text that scrolls itself on the statusbar. Optional                      |
+* | text     | `string`  | Description of the background task. Optional                                 |
+* | silent   | `boolean` | If the plugin will display a notification or not. Default is false. Optional |
+* | resume   | `boolean` | Bring the app into the foreground if the notification is tapped. Optional    |
+*
 */
 var BackgroundMode = (function () {
     function BackgroundMode() {
@@ -76867,20 +76969,24 @@ var BackgroundMode = (function () {
     BackgroundMode.disable = function () { };
     /**
     * Checks if background mode is enabled or not.
+    * @returns {boolean} returns a true of false if the background mode is enabled.
     */
     BackgroundMode.isEnabled = function () { return; };
     /**
     * Can be used to get the information if the background mode is active.
+    * @returns {boolean} returns tru or flase if the background mode is active.
     */
     BackgroundMode.isActive = function () { return; };
     /**
     * Override the default title, ticker and text.
     * Available only for Android platform.
+    * @param {Configure} options List of option to configure. See table below
     */
     BackgroundMode.setDefaults = function (options) { };
     /**
     * Modify the displayed information.
     * Available only for Android platform.
+    * @param {Configure} options Any options you want to update. See table below.
     */
     BackgroundMode.update = function (options) { };
     /**
@@ -76920,7 +77026,7 @@ var BackgroundMode = (function () {
     ], BackgroundMode, "on", null);
     BackgroundMode = __decorate([
         plugin_1.Plugin({
-            plugin: 'de.appplant.cordova.plugin.background-mode',
+            plugin: 'cordova-plugin-background-mode',
             pluginRef: 'cordova.plugins.backgroundMode',
             repo: 'https://github.com/katzer/cordova-plugin-background-mode',
             platforms: ['Android', 'iOS', 'Windows Phone 8']
@@ -76930,7 +77036,7 @@ var BackgroundMode = (function () {
 }());
 exports.BackgroundMode = BackgroundMode;
 
-},{"./plugin":496}],455:[function(require,module,exports){
+},{"./plugin":498}],455:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -77028,7 +77134,7 @@ var Badge = (function () {
 }());
 exports.Badge = Badge;
 
-},{"./plugin":496}],456:[function(require,module,exports){
+},{"./plugin":498}],456:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -77071,6 +77177,9 @@ var BarcodeScanner = (function () {
      * @param data
      */
     BarcodeScanner.encode = function (type, data) { return; };
+    /**
+     * @private
+     */
     BarcodeScanner.Encode = {
         TEXT_TYPE: 'TEXT_TYPE',
         EMAIL_TYPE: 'EMAIL_TYPE',
@@ -77097,7 +77206,7 @@ var BarcodeScanner = (function () {
 }());
 exports.BarcodeScanner = BarcodeScanner;
 
-},{"./plugin":496}],457:[function(require,module,exports){
+},{"./plugin":498}],457:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -77125,8 +77234,9 @@ var Base64ToGallery = (function () {
     }
     /**
      * Converts a base64 string to an image file in the device gallery
-     * @param data
-     * @param prefix
+     * @param {string} data The actual base64 string that you want to save
+     * @param {sstring} prefix Prefix the file with a string. Default is 'img_'. Optional.
+     * @returns {Promise} returns a promise that resolves when the image is saved.
      */
     Base64ToGallery.base64ToGallery = function (data, prefix) {
         return;
@@ -77146,7 +77256,7 @@ var Base64ToGallery = (function () {
 }());
 exports.Base64ToGallery = Base64ToGallery;
 
-},{"./plugin":496}],458:[function(require,module,exports){
+},{"./plugin":498}],458:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -77225,7 +77335,7 @@ var BatteryStatus = (function () {
 }());
 exports.BatteryStatus = BatteryStatus;
 
-},{"./plugin":496}],459:[function(require,module,exports){
+},{"./plugin":498}],459:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -77649,7 +77759,7 @@ var BLE = (function () {
 }());
 exports.BLE = BLE;
 
-},{"./plugin":496}],460:[function(require,module,exports){
+},{"./plugin":498}],460:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -77662,126 +77772,126 @@ var plugin_1 = require('./plugin');
  * @name Bluetooth Serial
  * @description This plugin enables serial communication over Bluetooth. It was written for communicating between Android or iOS and an Arduino.
  * @usage
+ * ```ts
+ * // Write a string
+ * Bluetooth.write("hello world").then(success, failure);
+ *
+ * // Array of int or bytes
+ * Bluetooth.write([186, 220, 222]).then(success, failure);
+ *
+ * // Typed Array
+ * var data = new Uint8Array(4);
+ * data[0] = 0x41;
+ * data[1] = 0x42;
+ * data[2] = 0x43;
+ * data[3] = 0x44;
+ * Bluetooth.write(data).then(success, failure);
+ *
+ * // Array Buffer
+ * Bluetooth.write(data.buffer).then(success, failure);
+ * ```
  */
 var BluetoothSerial = (function () {
     function BluetoothSerial() {
     }
     /**
      * Connect to a Bluetooth device
-     * Returns an Observable. Subscribe to connect, unsubscribe to disconnect.
-     * @param macAddress_or_uuid Identifier of the remote device
+     * @param {string} macAddress_or_uuid Identifier of the remote device
+     * @returns {Observable} Subscribe to connect, unsubscribe to disconnect.
      */
     BluetoothSerial.connect = function (macAddress_or_uuid) { return; };
     /**
      * Connect insecurely to a Bluetooth device
-     * Returns an Observable. Subscribe to connect, unsubscribe to disconnect.
-     * @param macAddress Identifier of the remote device
+     * @param {string} macAddress Identifier of the remote device
+     * @returns {Observable} Subscribe to connect, unsubscribe to disconnect.
      */
     BluetoothSerial.connectInsecure = function (macAddress) { return; };
     /**
      * Writes data to the serial port
-     * @param data ArrayBuffer of data
-     * @usage
-     * ```ts
-     * // Write a string
-     * Bluetooth.write("hello world").then(success, failure);
-     *
-     * // Array of int or bytes
-     * Bluetooth.write([186, 220, 222]).then(success, failure);
-     *
-     * // Typed Array
-     * var data = new Uint8Array(4);
-     * data[0] = 0x41;
-     * data[1] = 0x42;
-     * data[2] = 0x43;
-     * data[3] = 0x44;
-     * Bluetooth.write(data).then(success, failure);
-     *
-     * // Array Buffer
-     * Bluetooth.write(data.buffer).then(success, failure);
-     * ```
+     * @param {any} data ArrayBuffer of data
+     * @returns {Promise} returns a promise when data has been written
      */
     BluetoothSerial.write = function (data) { return; };
     /**
      * Gets the number of bytes of data available
+     * @returns {Promise} returns a promise that contains the available bytes
      */
     BluetoothSerial.available = function () { return; };
     /**
      * Reads data from the buffer
+     * @returns {Promise} returns a promise with data from the buffer
      */
     BluetoothSerial.read = function () { return; };
     /**
      * Reads data from the buffer until it reaches a delimiter
-     * @param delimiter
+     * @param {string} delimiter string that you want to search until
+     * @returns {Promise} returns a promise
      */
     BluetoothSerial.readUntil = function (delimiter) { return; };
     /**
      * Subscribe to be notified when data is received
-     * @param delimiter
+     * @param {string} delimiter the string you want to watch for
+     * @returns {Observable} returns an observable.
      */
     BluetoothSerial.subscribe = function (delimiter) { return; };
     /**
      * Subscribe to be notified when data is received
+     * @returns {Observable} returns an observable
      */
     BluetoothSerial.subscribeRawData = function () { return; };
     /**
      * Clears data in buffer
+     * @returns {Promise} returns a promise when completed
      */
     BluetoothSerial.clear = function () { return; };
     /**
      * Lists bonded devices
+     * @returns {Promise} returns a promise
      */
     BluetoothSerial.list = function () { return; };
     /**
      * Reports if bluetooth is enabled
+     * @returns {Promise} returns a promise
      */
     BluetoothSerial.isEnabled = function () { return; };
     /**
      * Reports the connection status
+     * @returns {Promise} returns a promise
      */
     BluetoothSerial.isConnected = function () { return; };
     /**
      * Reads the RSSI from the connected peripheral
+     * @returns {Promise} returns a promise
      */
     BluetoothSerial.readRSSI = function () { return; };
     /**
      * Show the Bluetooth settings on the device
+     * @returns {Promise} returns a promise
      */
     BluetoothSerial.showBluetoothSettings = function () { return; };
     /**
      * Enable Bluetooth on the device
+     * @returns {Promise} returns a promise
      */
     BluetoothSerial.enable = function () { return; };
     /**
      * Discover unpaired devices
-     * @usage
-     * ```ts
-     * [{
-     *    "class": 276,
-     *    "id": "10:BF:48:CB:00:00",
-     *    "address": "10:BF:48:CB:00:00",
-     *    "name": "Nexus 7"
-     * }, {
-     *    "class": 7936,
-     *    "id": "00:06:66:4D:00:00",
-     *    "address": "00:06:66:4D:00:00",
-     *    "name": "RN42"
-     * }]
-     * ```
+     * @returns {Promise} returns a promise
      */
     BluetoothSerial.discoverUnpaired = function () { return; };
     /**
      * Subscribe to be notified on Bluetooth device discovery. Discovery process must be initiated with the `discoverUnpaired` function.
+     * @returns {Observable} Returns an observable
      */
     BluetoothSerial.setDeviceDiscoveredListener = function () { return; };
     /**
      * Sets the human readable device name that is broadcasted to other devices
-     * @param newName Desired name of device
+     * @param {string} newName Desired name of device
      */
     BluetoothSerial.setName = function (newName) { };
     /**
      * Makes the device discoverable by other devices
-     * @param discoverableDuration Desired number of seconds device should be discoverable for
+     * @param {number} discoverableDuration Desired number of seconds device should be discoverable for
      */
     BluetoothSerial.setDiscoverable = function (discoverableDuration) { };
     __decorate([
@@ -77903,7 +78013,7 @@ var BluetoothSerial = (function () {
 }());
 exports.BluetoothSerial = BluetoothSerial;
 
-},{"./plugin":496}],461:[function(require,module,exports){
+},{"./plugin":498}],461:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -77970,7 +78080,7 @@ var Brightness = (function () {
 }());
 exports.Brightness = Brightness;
 
-},{"./plugin":496}],462:[function(require,module,exports){
+},{"./plugin":498}],462:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -78332,7 +78442,7 @@ var Calendar = (function () {
 }());
 exports.Calendar = Calendar;
 
-},{"./plugin":496}],463:[function(require,module,exports){
+},{"./plugin":498}],463:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -78365,8 +78475,8 @@ var Camera = (function () {
     }
     /**
      * Take a picture or video, or load one from the library.
-     * @param {CameraOptions} options
-     * @return Returns a Promise that resolves with Base64 encoding of the image data, or the image file URI, depending on cameraOptions, otherwise rejects with an error.
+     * @param {CameraOptions} options Options that you want to pass to the camera. Encoding type, quality, etc.
+     * @return {Promise} Returns a Promise that resolves with Base64 encoding of the image data, or the image file URI, depending on cameraOptions, otherwise rejects with an error.
      */
     Camera.getPicture = function (options) { return; };
     /**
@@ -78377,6 +78487,7 @@ var Camera = (function () {
     Camera.cleanup = function () { };
     ;
     /**
+     * @private
      * @enum {number}
      */
     Camera.DestinationType = {
@@ -78388,6 +78499,7 @@ var Camera = (function () {
         NATIVE_URI: 2
     };
     /**
+     * @private
      * @enum {number}
      */
     Camera.EncodingType = {
@@ -78397,6 +78509,7 @@ var Camera = (function () {
         PNG: 1
     };
     /**
+     * @private
      * @enum {number}
      */
     Camera.MediaType = {
@@ -78408,6 +78521,7 @@ var Camera = (function () {
         ALLMEDIA: 2
     };
     /**
+     * @private
      * @enum {number}
      */
     Camera.PictureSourceType = {
@@ -78419,6 +78533,7 @@ var Camera = (function () {
         SAVEDPHOTOALBUM: 2
     };
     /**
+     * @private
      * Matches iOS UIPopoverArrowDirection constants to specify arrow location on popover.
      * @enum {number}
      */
@@ -78430,6 +78545,7 @@ var Camera = (function () {
         ARROW_ANY: 15
     };
     /**
+     * @private
      * @enum {number}
      */
     Camera.Direction = {
@@ -78460,7 +78576,7 @@ var Camera = (function () {
 }());
 exports.Camera = Camera;
 
-},{"./plugin":496}],464:[function(require,module,exports){
+},{"./plugin":498}],464:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -78504,7 +78620,7 @@ var CardIO = (function () {
     CardIO.canScan = function () { return; };
     /**
      * Scan a credit card with card.io.
-     * @param options
+     * @param {CardIOOptions} options Options for configuring the plugin
      */
     CardIO.scan = function (options) { return; };
     /**
@@ -78532,7 +78648,7 @@ var CardIO = (function () {
 }());
 exports.CardIO = CardIO;
 
-},{"./plugin":496}],465:[function(require,module,exports){
+},{"./plugin":498}],465:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -78559,12 +78675,12 @@ var plugin_1 = require('./plugin');
  *
  * Clipboard.paste().then(
  *    (resolve : string) => {
-  *     alert(resolve);
-*     },
+ *     alert(resolve);
+ *     },
  *     (reject : string) => {
  *     alert("Error: " + reject);
  *     }
-*     );
+ *     );
  * );
  * ```
  */
@@ -78573,13 +78689,13 @@ var Clipboard = (function () {
     }
     /**
      * Copies the given text
-     * @param text
-     * @returns {Promise<T>}
+     * @param {string} text Text that gets copied on the system clipboard
+     * @returns {Promise<T>} Returns a promise after the text has been copied
      */
     Clipboard.copy = function (text) { return; };
     /**
      * Pastes the text stored in clipboard
-     * @returns {Promise<T>}
+     * @returns {Promise<T>} Returns a promise after the text has been pasted
      */
     Clipboard.paste = function () { return; };
     __decorate([
@@ -78600,7 +78716,7 @@ var Clipboard = (function () {
 }());
 exports.Clipboard = Clipboard;
 
-},{"./plugin":496}],466:[function(require,module,exports){
+},{"./plugin":498}],466:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -78609,6 +78725,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 var plugin_1 = require('./plugin');
+/**
+ * @private
+ */
 var Contact = (function () {
     function Contact() {
         this._objectInstance = navigator.contacts.create();
@@ -78737,6 +78856,9 @@ var Contact = (function () {
     return Contact;
 }());
 exports.Contact = Contact;
+/**
+ * @private
+ */
 var ContactName = (function () {
     function ContactName(formatted, familyName, givenName, middleName, honorificPrefix, honorificSuffix) {
         this._objectInstance = new window.ContactName(formatted, familyName, givenName, middleName, honorificPrefix, honorificSuffix);
@@ -78792,6 +78914,9 @@ var ContactName = (function () {
     return ContactName;
 }());
 exports.ContactName = ContactName;
+/**
+ * @private
+ */
 var ContactField = (function () {
     function ContactField(type, value, pref) {
         this._objectInstance = new window.ContactField(type, value, pref);
@@ -78823,6 +78948,9 @@ var ContactField = (function () {
     return ContactField;
 }());
 exports.ContactField = ContactField;
+/**
+ * @private
+ */
 var ContactAddress = (function () {
     function ContactAddress(pref, type, formatted, streetAddress, locality, region, postalCode, country) {
         this._objectInstance = new window.ContactAddress(pref, type, formatted, streetAddress, locality, region, postalCode, country);
@@ -78894,6 +79022,9 @@ var ContactAddress = (function () {
     return ContactAddress;
 }());
 exports.ContactAddress = ContactAddress;
+/**
+ * @private
+ */
 var ContactOrganization = (function () {
     function ContactOrganization() {
         this._objectInstance = new window.ContactOrganization();
@@ -78941,6 +79072,9 @@ var ContactOrganization = (function () {
     return ContactOrganization;
 }());
 exports.ContactOrganization = ContactOrganization;
+/**
+ * @private
+ */
 var ContactFindOptions = (function () {
     function ContactFindOptions() {
         this._objectInstance = new window.ContactFindOptions();
@@ -79010,9 +79144,6 @@ var Contacts = (function () {
     };
     /**
      * Search for contacts in the Contacts list.
-     *
-     * Example: Contacts.find(['*'], { filter: 'Max' }) // will search for a displayName of 'Max'
-     *
      * @param fields {string[]}  Contact fields to be used as a search qualifier.
      *  A zero-length contactFields parameter is invalid and results in ContactError.INVALID_ARGUMENT_ERROR.
      *  A contactFields value of "*" searches all contact fields.
@@ -79051,7 +79182,7 @@ var Contacts = (function () {
 }());
 exports.Contacts = Contacts;
 
-},{"./plugin":496}],467:[function(require,module,exports){
+},{"./plugin":498}],467:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -79074,7 +79205,6 @@ var plugin_1 = require('./plugin');
  * import {DatePicker} from 'ionic-native';
  *
  *
- *
  * DatePicker.show({
  *   date: new Date(),
  *   mode: 'date'
@@ -79090,7 +79220,7 @@ var DatePicker = (function () {
     }
     /**
      * Shows the date and/or time picker dialog(s)
-     * @param options
+     * @param {DatePickerOptions} options Options for the date picker.
      * @returns {Promise<Date>} Returns a promise that resolves with the picked date and/or time, or rejects with an error.
      */
     DatePicker.show = function (options) { return; };
@@ -79108,7 +79238,7 @@ var DatePicker = (function () {
 }());
 exports.DatePicker = DatePicker;
 
-},{"./plugin":496}],468:[function(require,module,exports){
+},{"./plugin":498}],468:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -79196,7 +79326,7 @@ var DBMeter = (function () {
 }());
 exports.DBMeter = DBMeter;
 
-},{"./plugin":496}],469:[function(require,module,exports){
+},{"./plugin":498}],469:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -79271,7 +79401,7 @@ var Deeplinks = (function () {
 }());
 exports.Deeplinks = Deeplinks;
 
-},{"./plugin":496}],470:[function(require,module,exports){
+},{"./plugin":498}],470:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -79321,7 +79451,7 @@ var Device = (function () {
 }());
 exports.Device = Device;
 
-},{"./plugin":496}],471:[function(require,module,exports){
+},{"./plugin":498}],471:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -79373,7 +79503,7 @@ var DeviceAccounts = (function () {
 }());
 exports.DeviceAccounts = DeviceAccounts;
 
-},{"./plugin":496}],472:[function(require,module,exports){
+},{"./plugin":498}],472:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -79414,7 +79544,6 @@ var DeviceMotion = (function () {
     }
     /**
      * Get the current acceleration along the x, y, and z axes.
-     *
      * @returns {Promise<any>} Returns object with x, y, z, and timestamp properties
      */
     DeviceMotion.getCurrentAcceleration = function () {
@@ -79422,18 +79551,8 @@ var DeviceMotion = (function () {
     };
     /**
      * Watch the device acceleration. Clear the watch by unsubscribing from the observable.
-     *
-     * ```ts
-     * // Watch device acceleration
-     * var subscription = DeviceMotion.watchPosition().subscribe(acceleration => {
-     *   console.log(acceleration);
-     * });
-     *
-     * // Stop watch
-     * subscription.unsubscribe();
-     * ```
-     * @param options
-     * @returns {Observable<AccelerationData>}
+     * @param {AccelerometerOptions} options list of options for the accelerometer.
+     * @returns {Observable<AccelerationData>} Observable returns an observable that you can subscribe to
      */
     DeviceMotion.watchAcceleration = function (options) {
         return;
@@ -79459,7 +79578,7 @@ var DeviceMotion = (function () {
 }());
 exports.DeviceMotion = DeviceMotion;
 
-},{"./plugin":496}],473:[function(require,module,exports){
+},{"./plugin":498}],473:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -79506,8 +79625,8 @@ var DeviceOrientation = (function () {
      * Get the device current heading at a regular interval
      *
      * Stop the watch by unsubscribing from the observable
-     * @param options
-     * @returns {Observable<CompassHeading>}
+     * @param {CompassOptions} options Options for compass. Frequency and Filter. Optional
+     * @returns {Observable<CompassHeading>} Returns an observable that contains the compass heading
      */
     DeviceOrientation.watchHeading = function (options) { return; };
     __decorate([
@@ -79531,7 +79650,7 @@ var DeviceOrientation = (function () {
 }());
 exports.DeviceOrientation = DeviceOrientation;
 
-},{"./plugin":496}],474:[function(require,module,exports){
+},{"./plugin":498}],474:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -79656,7 +79775,7 @@ var Diagnostic = (function () {
 }());
 exports.Diagnostic = Diagnostic;
 
-},{"./plugin":496}],475:[function(require,module,exports){
+},{"./plugin":498}],475:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -79686,9 +79805,9 @@ var Dialogs = (function () {
     }
     /**
      * Shows a custom alert or dialog box.
-     * @param message Dialog message. (String)
-     * @param title Dialog title. (String) (Optional, defaults to Alert)
-     * @param buttonName Button name. (String) (Optional, defaults to OK)
+     * @param {string} message Dialog message.
+     * @param {string} title Dialog title. (Optional, defaults to Alert)
+     * @param {string} buttonName Button name. (Optional, defaults to OK)
      * @returns {Promise<any>} Returns a blank promise once the user has dismissed the alert.
      */
     Dialogs.alert = function (message, title, buttonName) {
@@ -79698,9 +79817,9 @@ var Dialogs = (function () {
     };
     /**
      * Displays a customizable confirmation dialog box.
-     * @param message Dialog message. (String)
-     * @param title Dialog title. (String) (Optional, defaults to Confirm)
-     * @param buttonLabels Array of strings specifying button labels. (Array) (Optional, defaults to [OK,Cancel])
+     * @param {string} message Dialog message.
+     * @param {string} title Dialog title. (Optional, defaults to Confirm)
+     * @param {Array<string>} buttonLabels Array of strings specifying button labels. (Optional, defaults to [OK,Cancel])
      * @returns {Promise<number>} Returns a promise that resolves the button index that was clicked. Note that the index use one-based indexing.
      */
     Dialogs.confirm = function (message, title, buttonLabels) {
@@ -79710,10 +79829,10 @@ var Dialogs = (function () {
     };
     /**
      * Displays a native dialog box that is more customizable than the browser's prompt function.
-     * @param message Dialog message. (String)
-     * @param title Dialog title (String) (Optional, defaults to Prompt)
-     * @param buttonLabels  Array of strings specifying button labels (Array) (Optional, defaults to ["OK","Cancel"])
-     * @param defaultText Default textbox input value (String) (Optional, Default: empty string)
+     * @param {string} message Dialog message.
+     * @param {string} title Dialog title. (Optional, defaults to Prompt)
+     * @param {Array<string>} buttonLabels  Array of strings specifying button labels. (Optional, defaults to ["OK","Cancel"])
+     * @param {string} defaultText Default textbox input value.  (Optional, Default: empty string)
      * @returns {Promise<any>} Returns a promise that resolves an object with the button index clicked and the text entered
      */
     Dialogs.prompt = function (message, title, buttonLabels, defaultText) {
@@ -79724,7 +79843,7 @@ var Dialogs = (function () {
     };
     /**
      * The device plays a beep sound.
-     * @param times The number of times to repeat the beep. (Number)
+     * @param {numbers} times The number of times to repeat the beep.
      */
     Dialogs.beep = function (times) { };
     __decorate([
@@ -79761,7 +79880,7 @@ var Dialogs = (function () {
 }());
 exports.Dialogs = Dialogs;
 
-},{"./plugin":496}],476:[function(require,module,exports){
+},{"./plugin":498}],476:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -79868,7 +79987,7 @@ var EmailComposer = (function () {
 }());
 exports.EmailComposer = EmailComposer;
 
-},{"./plugin":496}],477:[function(require,module,exports){
+},{"./plugin":498}],477:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -79959,8 +80078,8 @@ var Facebook = (function () {
     }
     /**
      * Browser wrapper
-     * @param appId
-     * @param version
+     * @param {number} appId Your Facebook AppID from their dashboard
+     * @param {string} version The version of API you may want to use. Optional
      */
     Facebook.browserInit = function (appId, version) {
         return;
@@ -80133,7 +80252,7 @@ var Facebook = (function () {
 }());
 exports.Facebook = Facebook;
 
-},{"./plugin":496}],478:[function(require,module,exports){
+},{"./plugin":498}],478:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -80710,7 +80829,7 @@ var File = (function () {
 }());
 exports.File = File;
 
-},{"./plugin":496}],479:[function(require,module,exports){
+},{"./plugin":498}],479:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -80808,7 +80927,7 @@ var Transfer = (function () {
 }());
 exports.Transfer = Transfer;
 
-},{"./plugin":496}],480:[function(require,module,exports){
+},{"./plugin":498}],480:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -80887,7 +81006,7 @@ var Flashlight = (function () {
 }());
 exports.Flashlight = Flashlight;
 
-},{"./plugin":496}],481:[function(require,module,exports){
+},{"./plugin":498}],481:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -80972,7 +81091,7 @@ var Geolocation = (function () {
 }());
 exports.Geolocation = Geolocation;
 
-},{"./plugin":496,"rxjs/Observable":512}],482:[function(require,module,exports){
+},{"./plugin":498,"rxjs/Observable":514}],482:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -81007,55 +81126,63 @@ var Globalization = (function () {
     Globalization.getLocaleName = function () { return; };
     /**
      * Converts date to string
-     * @param date
-     * @param options
-     * @return {Promise<{value: string}>}
+     * @param {Date} date Date you wish to convert
+     * @param options Options for the converted date. Length, selector.
+     * @return {Promise<{value: string}>} Returns a promise when the date has been converted.
      */
     Globalization.dateToString = function (date, options) { return; };
     /**
-     *
-     * @param dateString
-     * @param options
+     * Parses a date formatted as a string, according to the client's user preferences and calendar using the time zone of the client, and returns the corresponding date object.
+     * @param {string} dateString Date as a string to be converted
+     * @param options Options for the converted date. Length, selector.
+     * @return {Promise<{value: string}>} Returns a promise when the date has been converted.
      */
     Globalization.stringToDate = function (dateString, options) { return; };
     /**
-     *
-     * @param options
+     * Returns a pattern string to format and parse dates according to the client's user preferences.
+     * @param options Object with the format length and selector
+     * @return {Promise<{value: string}>} Returns a promise.
      */
     Globalization.getDatePattern = function (options) { return; };
     /**
-     *
-     * @param options
+     * Returns an array of the names of the months or days of the week, depending on the client's user preferences and calendar.
+     * @param options Object with type (narrow or wide) and item (month or days).
+     * @return {Promise<{value: string}>} Returns a promise.
      */
     Globalization.getDateNames = function (options) { return; };
     /**
-     * Check if day light saving is active
-     * @param date
+     * Indicates whether daylight savings time is in effect for a given date using the client's time zone and calendar.
+     * @param {data} date Date to process
+     * @returns {Promise<dst>} reutrns a promise with the value
      */
     Globalization.isDayLightSavingsTime = function (date) { return; };
     /**
-     * Get first day of week
+     * Returns the first day of the week according to the client's user preferences and calendar.
+     * @returns {Promise<value>} reutrns a promise with the value
      */
     Globalization.getFirstDayOfWeek = function () { return; };
     /**
-     *
+     * Returns a number formatted as a string according to the client's user preferences.
      * @param options
      */
     Globalization.numberToString = function (options) { return; };
     /**
      *
-     * @param stringToConvert
-     * @param options
+     * @param {string} stringToConvert String you want to conver to a number
+     * @param options  The type of number you want to return. Can be decimal, percent, or currency.
+     * @returns {Promise} Returns a promise with the value.
      */
     Globalization.stringToNumber = function (stringToConvert, options) { return; };
     /**
-     *
-     * @param options
+     * Returns a pattern string to format and parse numbers according to the client's user preferences.
+     * @param options Can be decimal, percent, or currency.
+     * @returns {Promise} returns a promise with the value.
      */
     Globalization.getNumberPattern = function (options) { return; };
     /**
-     *
-     * @param currencyCode
+     * Returns a pattern string to format and parse currency values according to the client's user preferences and ISO 4217 currency code.
+     * @param {string} currencyCode Currency Code.A
+     * @returns {Promise} returns a promise with the value
      */
     Globalization.getCurrencyPattern = function (currencyCode) { return; };
     __decorate([
@@ -81123,7 +81250,7 @@ var Globalization = (function () {
 }());
 exports.Globalization = Globalization;
 
-},{"./plugin":496}],483:[function(require,module,exports){
+},{"./plugin":498}],483:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -81186,7 +81313,7 @@ var GooglePlus = (function () {
 }());
 exports.GooglePlus = GooglePlus;
 
-},{"./plugin":496}],484:[function(require,module,exports){
+},{"./plugin":498}],484:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -81333,7 +81460,7 @@ var GoogleAnalytics = (function () {
 }());
 exports.GoogleAnalytics = GoogleAnalytics;
 
-},{"./plugin":496}],485:[function(require,module,exports){
+},{"./plugin":498}],485:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -81521,7 +81648,7 @@ var GoogleMap = (function () {
     GoogleMap.prototype.addGroundOverlay = function (options) {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            _this._objectInstance.addTileOverlay(options, function (groundOverlay) {
+            _this._objectInstance.addGroundOverlay(options, function (groundOverlay) {
                 if (groundOverlay)
                     resolve(new GoogleMapsGroundOverlay(groundOverlay));
                 else
@@ -81532,7 +81659,7 @@ var GoogleMap = (function () {
     GoogleMap.prototype.addKmlOverlay = function (options) {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            _this._objectInstance.addTileOverlay(options, function (kmlOverlay) {
+            _this._objectInstance.addKmlOverlay(options, function (kmlOverlay) {
                 if (kmlOverlay)
                     resolve(new GoogleMapsKmlOverlay(kmlOverlay));
                 else
@@ -82319,7 +82446,7 @@ var GoogleMapsLatLng = (function () {
 }());
 exports.GoogleMapsLatLng = GoogleMapsLatLng;
 
-},{"./plugin":496,"rxjs/Observable":512}],486:[function(require,module,exports){
+},{"./plugin":498,"rxjs/Observable":514}],486:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -82577,7 +82704,7 @@ var Hotspot = (function () {
 }());
 exports.Hotspot = Hotspot;
 
-},{"./plugin":496}],487:[function(require,module,exports){
+},{"./plugin":498}],487:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -82635,7 +82762,501 @@ var Httpd = (function () {
 }());
 exports.Httpd = Httpd;
 
-},{"./plugin":496}],488:[function(require,module,exports){
+},{"./plugin":498}],488:[function(require,module,exports){
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var plugin_1 = require('./plugin');
+var Observable_1 = require('rxjs/Observable');
+/**
+ * @name IBeacon
+ * @description
+ * This plugin provides functions for working with iBeacons.
+ *
+ *  The plugin's API closely mimics the one exposed through the [CLLocationManager](https://developer.apple.com/library/ios/documentation/CoreLocation/Reference/CLLocationManager_Class/index.html) introduced in iOS 7.
+ *
+ * @usage
+ *
+ * ```ts
+ * import {IBeacon} from 'ionic-native';
+ *
+ *
+ * // Request permission to use location on iOS
+ * IBeacon.requestAlwaysAuthorization();
+ * // create a new delegate and register it with the native layer
+ * let delegate = IBeacon.Delegate();
+ *
+ * // Subscribe to some of the delegate's event handlers
+ * delegate.didRangeBeaconsInRegion()
+ *   .subscribe(
+ *     data => {console.log('didRangeBeaconsInRegion: ', data)},
+ *     error => console.error
+ *   );
+ * delegate.didStartMonitoringForRegion()
+ *   .subscribe(
+ *     data => {console.log('didStartMonitoringForRegion: ', data)},
+ *     error => console.error
+ *   );
+ * delegate.didEnterRegion()
+ *   .subscribe(
+ *     data => {
+ *       console.log('didEnterRegion: ', data);
+ *     }
+ *   );
+ *
+ * let beaconRegion = IBeacon.BeaconRegion('deskBeacon','F7826DA6-ASDF-ASDF-8024-BC5B71E0893E');
+ *
+ * IBeacon.startMonitoringForRegion(beaconRegion)
+ *   .then(
+ *     () => console.log('Native layer recieved the request to monitoring'),
+ *     error => console.error('Native layer failed to begin monitoring: ', error)
+ *   );
+ * ```
+ */
+var IBeacon = (function () {
+    function IBeacon() {
+    }
+    /**
+     * Instances of this class are delegates between the {@link LocationManager} and
+     * the code that consumes the messages generated on in the native layer.
+     *
+     * @returns {Delegate} An instance of the type {@type Delegate}.
+     */
+    IBeacon.Delegate = function () {
+        var delegate = new cordova.plugins.locationManager.Delegate();
+        delegate.didChangeAuthorizationStatus = function (pluginResult) {
+            return new Observable_1.Observable(function (observer) {
+                var cb = function (data) { return observer.next(data); };
+                return delegate.didChangeAuthorizationStatus = cb;
+            });
+        };
+        delegate.didDetermineStateForRegion = function (pluginResult) {
+            return new Observable_1.Observable(function (observer) {
+                var cb = function (data) { return observer.next(data); };
+                return delegate.didDetermineStateForRegion = cb;
+            });
+        };
+        delegate.didEnterRegion = function (pluginResult) {
+            return new Observable_1.Observable(function (observer) {
+                var cb = function (data) { return observer.next(data); };
+                return delegate.didEnterRegion = cb;
+            });
+        };
+        delegate.didExitRegion = function (pluginResult) {
+            return new Observable_1.Observable(function (observer) {
+                var cb = function (data) { return observer.next(data); };
+                return delegate.didExitRegion = cb;
+            });
+        };
+        delegate.didRangeBeaconsInRegion = function (pluginResult) {
+            return new Observable_1.Observable(function (observer) {
+                var cb = function (data) { return observer.next(data); };
+                return delegate.didRangeBeaconsInRegion = cb;
+            });
+        };
+        delegate.didStartMonitoringForRegion = function (pluginResult) {
+            return new Observable_1.Observable(function (observer) {
+                var cb = function (data) { return observer.next(data); };
+                return delegate.didStartMonitoringForRegion = cb;
+            });
+        };
+        delegate.monitoringDidFailForRegionWithError = function (pluginResult) {
+            return new Observable_1.Observable(function (observer) {
+                var cb = function (data) { return observer.next(data); };
+                return delegate.monitoringDidFailForRegionWithError = cb;
+            });
+        };
+        delegate.peripheralManagerDidStartAdvertising = function (pluginResult) {
+            return new Observable_1.Observable(function (observer) {
+                var cb = function (data) { return observer.next(data); };
+                return delegate.peripheralManagerDidStartAdvertising = cb;
+            });
+        };
+        delegate.peripheralManagerDidUpdateState = function (pluginResult) {
+            return new Observable_1.Observable(function (observer) {
+                var cb = function (data) { return observer.next(data); };
+                return delegate.peripheralManagerDidUpdateState = cb;
+            });
+        };
+        cordova.plugins.locationManager.setDelegate(delegate);
+        return delegate;
+    };
+    /**
+     * Creates a new BeaconRegion
+     *
+     * @param {String} identifier @see {CLRegion}
+     * @param {String} uuid The proximity ID of the beacon being targeted.
+     * This value must not be blank nor invalid as a UUID.
+     * @param {Number} major The major value that you use to identify one or more beacons.
+     * @param {Number} minor The minor value that you use to identify a specific beacon.
+     * @param {BOOL} notifyEntryStateOnDisplay
+     *
+     * @return Returns the BeaconRegion that was created
+     */
+    IBeacon.BeaconRegion = function (identifer, uuid, minor, major, notifyEntryStateOnDisplay) {
+        return new cordova.plugins.locationManager.BeaconRegion(identifer, uuid, minor, major, notifyEntryStateOnDisplay);
+    };
+    /**
+     * @return Returns the Delegate
+     */
+    IBeacon.getDelegate = function () { return; };
+    /**
+     * @param {Delegate} delegate An instance of a delegate to register with the native layer.
+     *
+     * @return Returns the Delegate
+     */
+    IBeacon.setDelegate = function (delegate) { return; };
+    /**
+     * Signals the native layer that the client side is ready to consume messages.
+     * Readiness here means that it has a {Delegate} set by the consumer javascript
+     * code.
+     *
+     * The {LocationManager.setDelegate()} will implicitly call this method as well,
+     * therefore the only case when you have to call this manually is if you don't
+     * wish to specify a {Delegate} of yours.
+     *
+     * The purpose of this signaling mechanism is to make the events work when the
+     * app is being woken up by the Operating System to give it a chance to handle
+     * region monitoring events for example.
+     *
+     * If you don't set a {Delegate} and don't call this method manually, an error
+     * message get emitted in the native runtime and the DOM as well after a certain
+     * period of time.
+     *
+     * @return Returns a promise which is resolved as soon as the
+     * native layer acknowledged the request and started to send events.
+     */
+    IBeacon.onDomDelegateReady = function () { return; };
+    /**
+     * Determines if bluetooth is switched on, according to the native layer.
+     * @returns Returns a promise which is resolved with a {Boolean}
+     * indicating whether bluetooth is active.
+     */
+    IBeacon.isBluetoothEnabled = function () { return; };
+    /**
+     * Enables Bluetooth using the native Layer. (ANDROID ONLY)
+     *
+     * @returns Returns a promise which is resolved when Bluetooth
+     * could be enabled. If not, the promise will be rejected with an error.
+     */
+    IBeacon.enableBluetooth = function () { return; };
+    /**
+     * Disables Bluetooth using the native Layer. (ANDROID ONLY)
+     *
+     * @returns Returns a promise which is resolved when Bluetooth
+     * could be enabled. If not, the promise will be rejected with an error.
+     */
+    IBeacon.disableBluetooth = function () { return; };
+    /**
+     * Start monitoring the specified region.
+     *
+     * If a region of the same type with the same identifier is already being
+     * monitored for this application,
+     * it will be removed from monitoring. For circular regions, the region
+     * monitoring service will prioritize
+     * regions by their size, favoring smaller regions over larger regions.
+     *
+     * This is done asynchronously and may not be immediately reflected in monitoredRegions.
+     *
+     * @param {Region} region An instance of {Region} which will be monitored
+     * by the operating system.
+     *
+     * @return Returns a promise which is resolved as soon as the
+     * native layer acknowledged the dispatch of the monitoring request.
+     */
+    IBeacon.startMonitoringForRegion = function (region) { return; };
+    /**
+     * Stop monitoring the specified region.  It is valid to call
+     * stopMonitoringForRegion: for a region that was registered for monitoring
+     * with a different location manager object, during this or previous
+     * launches of your application.
+     *
+     * This is done asynchronously and may not be immediately reflected in monitoredRegions.
+     *
+     * @param {Region} region An instance of {Region} which will be monitored
+     * by the operating system.
+     *
+     * @return Returns a promise which is resolved as soon as the
+     * native layer acknowledged the dispatch of the request to stop monitoring.
+     */
+    IBeacon.stopMonitoringForRegion = function (region) { return; };
+    /**
+     * Request state the for specified region. When result is ready
+     * didDetermineStateForRegion is triggered. This can be any region,
+     * also those which is not currently monitored.
+     *
+     * This is done asynchronously and may not be immediately reflected in monitoredRegions.
+     *
+     * @param {Region} region An instance of {Region} which will be monitored
+     * by the operating system.
+     *
+     * @return Returns a promise which is resolved as soon as the
+     * native layer acknowledged the dispatch of the request to stop monitoring.
+     */
+    IBeacon.requestStateForRegion = function (region) { return; };
+    /**
+     * Start ranging the specified beacon region.
+     *
+     * If a region of the same type with the same identifier is already being
+     * monitored for this application, it will be removed from monitoring.
+     *
+     * This is done asynchronously and may not be immediately reflected in rangedRegions.
+     *
+     * @param {Region} region An instance of {BeaconRegion} which will be monitored
+     * by the operating system.
+     *
+     * @return Returns a promise which is resolved as soon as the
+     * native layer acknowledged the dispatch of the monitoring request.
+     */
+    IBeacon.startRangingBeaconsInRegion = function (region) { return; };
+    /**
+     * Stop ranging the specified region.  It is valid to call
+     * stopMonitoringForRegion: for a region that was registered for ranging
+     * with a different location manager object, during this or previous
+     * launches of your application.
+     *
+     * This is done asynchronously and may not be immediately reflected in rangedRegions.
+     *
+     * @param {Region} region An instance of {BeaconRegion} which will be monitored
+     * by the operating system.
+     *
+     * @return Returns a promise which is resolved as soon as the
+     * native layer acknowledged the dispatch of the request to stop monitoring.
+     */
+    IBeacon.stopRangingBeaconsInRegion = function (region) { return; };
+    /**
+     * Queries the native layer to determine the current authorization in effect.
+     *
+     * @returns Returns a promise which is resolved with the
+     * requested authorization status.
+     */
+    IBeacon.getAuthorizationStatus = function () { return; };
+    /**
+     * For iOS 8 and above only. The permission model has changed by Apple in iOS 8, making it necessary for apps to
+     * explicitly request permissions via methods like these:
+     * <a href="https://developer.apple.com/library/prerelease/iOS/documentation/CoreLocation/Reference/CLLocationManager_Class/index.html#//apple_ref/occ/instm/CLLocationManager/requestWhenInUseAuthorization">requestWhenInUseAuthorization</a>
+     * <a href="https://developer.apple.com/library/prerelease/iOS/documentation/CoreLocation/Reference/CLLocationManager_Class/index.html#//apple_ref/occ/instm/CLLocationManager/requestAlwaysAuthorization">requestAlwaysAuthorization</a>
+     *
+     * If you are using this plugin on Android devices only, you will never have to use this, nor {@code requestAlwaysAuthorization}
+     * @returns Returns a promise that is resolved when the request dialog is shown.
+     */
+    IBeacon.requestWhenInUseAuthorization = function () { return; };
+    /**
+     * See the docuemntation of {@code requestWhenInUseAuthorization} for further details.
+     *
+     * @returns Returns a promise which is resolved when the native layer
+     * shows the request dialog.
+     */
+    IBeacon.requestAlwaysAuthorization = function () { return; };
+    /**
+     *
+     * @returns Returns a promise which is resolved with an {Array}
+     * of {Region} instances that are being monitored by the native layer.
+     */
+    IBeacon.getMonitoredRegions = function () { return; };
+    /**
+     *
+     * @returns Returns a promise which is resolved with an {Array}
+     * of {Region} instances that are being ranged by the native layer.
+     */
+    IBeacon.getRangedRegions = function () { return; };
+    /**
+     * Determines if ranging is available or not, according to the native layer.
+     * @returns Returns a promise which is resolved with a {Boolean}
+     * indicating whether ranging is available or not.
+     */
+    IBeacon.isRangingAvailable = function () { return; };
+    /**
+     * Determines if region type is supported or not, according to the native layer.
+     *
+     * @param {Region} region An instance of {Region} which will be checked
+     * by the operating system.
+     *
+     * @returns Returns a promise which is resolved with a {Boolean}
+     * indicating whether the region type is supported or not.
+     */
+    IBeacon.isMonitoringAvailableForClass = function (region) { return; };
+    /**
+     * Start advertising the specified region.
+     *
+     * If a region a different identifier is already being advertised for
+     * this application, it will be replaced with the new identifier.
+     *
+     * This call will accept a valid beacon even when no BlueTooth is available,
+     * and will start when BlueTooth is powered on. See {Delegate.}
+     *
+     * @param {Region} region An instance of {Region} which will be advertised
+     * by the operating system.
+     * @param {Integer} measuredPower: Optional parameter, if left empty, the device will
+     * use it's own default value.
+     *
+     * @return Returns a promise which is resolved as soon as the
+     * native layer acknowledged the dispatch of the advertising request.
+     */
+    IBeacon.startAdvertising = function (region, measuredPower) { return; };
+    /**
+     * Stop advertising as a beacon.
+     *
+     * This is done asynchronously and may not be immediately reflected in isAdvertising.
+     *
+     * @return Returns a promise which is resolved as soon as the
+     * native layer acknowledged the dispatch of the request to stop advertising.
+     */
+    IBeacon.stopAdvertising = function (region) { return; };
+    /**
+     * Determines if advertising is available or not, according to the native layer.
+     * @returns Returns a promise which is resolved with a {Boolean}
+     * indicating whether advertising is available or not.
+     */
+    IBeacon.isAdvertisingAvailable = function () { return; };
+    /**
+     * Determines if advertising is currently active, according to the native layer.
+     * @returns Returns a promise which is resolved with a {Boolean}
+     * indicating whether advertising is active.
+     */
+    IBeacon.isAdvertising = function () { return; };
+    /**
+     * Disables debug logging in the native layer. Use this method if you want
+     * to prevent this plugin from writing to the device logs.
+     *
+     * @returns Returns a promise which is resolved as soon as the
+     * native layer has set the logging level accordingly.
+     */
+    IBeacon.disableDebugLogs = function () { return; };
+    /**
+     * Enables the posting of debug notifications in the native layer. Use this method if you want
+     * to allow the plugin the posting local notifications.
+     * This can be very helpful when debugging how to apps behave when launched into the background.
+     *
+     * @returns Returns a promise which is resolved as soon as the
+     * native layer has set the flag to enabled.
+     */
+    IBeacon.enableDebugNotifications = function () { return; };
+    /**
+     * Disables the posting of debug notifications in the native layer. Use this method if you want
+     * to prevent the plugin from posting local notifications.
+     *
+     * @returns Returns a promise which is resolved as soon as the
+     * native layer has set the flag to disabled.
+     */
+    IBeacon.disableDebugNotifications = function () { return; };
+    /**
+     * Enables debug logging in the native layer. Use this method if you want
+     * a debug the inner workings of this plugin.
+     *
+     * @returns Returns a promise which is resolved as soon as the
+     * native layer has set the logging level accordingly.
+     */
+    IBeacon.enableDebugLogs = function () { return; };
+    /**
+     * Appends the provided [message] to the device logs.
+     * Note: If debug logging is turned off, this won't do anything.
+     *
+     * @param {String} message The message to append to the device logs.
+     *
+     * @returns Returns a promise which is resolved with the log
+     * message received by the native layer for appending. The returned message
+     * is expected to be equivalent to the one provided in the original call.
+     */
+    IBeacon.appendToDeviceLog = function (message) { return; };
+    __decorate([
+        plugin_1.Cordova()
+    ], IBeacon, "getDelegate", null);
+    __decorate([
+        plugin_1.Cordova()
+    ], IBeacon, "setDelegate", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], IBeacon, "onDomDelegateReady", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], IBeacon, "isBluetoothEnabled", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], IBeacon, "enableBluetooth", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], IBeacon, "disableBluetooth", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], IBeacon, "startMonitoringForRegion", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], IBeacon, "stopMonitoringForRegion", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], IBeacon, "requestStateForRegion", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], IBeacon, "startRangingBeaconsInRegion", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], IBeacon, "stopRangingBeaconsInRegion", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], IBeacon, "getAuthorizationStatus", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], IBeacon, "requestWhenInUseAuthorization", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], IBeacon, "requestAlwaysAuthorization", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], IBeacon, "getMonitoredRegions", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], IBeacon, "getRangedRegions", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], IBeacon, "isRangingAvailable", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], IBeacon, "isMonitoringAvailableForClass", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], IBeacon, "startAdvertising", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], IBeacon, "stopAdvertising", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], IBeacon, "isAdvertisingAvailable", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], IBeacon, "isAdvertising", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], IBeacon, "disableDebugLogs", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], IBeacon, "enableDebugNotifications", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], IBeacon, "disableDebugNotifications", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], IBeacon, "enableDebugLogs", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], IBeacon, "appendToDeviceLog", null);
+    IBeacon = __decorate([
+        plugin_1.Plugin({
+            plugin: 'cordova-plugin-ibeacon',
+            pluginRef: 'cordova.plugins.locationManager',
+            repo: 'https://github.com/petermetz/cordova-plugin-ibeacon',
+            platforms: ['Android', 'iOS']
+        })
+    ], IBeacon);
+    return IBeacon;
+}());
+exports.IBeacon = IBeacon;
+
+},{"./plugin":498,"rxjs/Observable":514}],489:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -82692,7 +83313,7 @@ var ImagePicker = (function () {
 }());
 exports.ImagePicker = ImagePicker;
 
-},{"./plugin":496}],489:[function(require,module,exports){
+},{"./plugin":498}],490:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -82728,7 +83349,7 @@ var InAppBrowser = (function () {
 }());
 exports.InAppBrowser = InAppBrowser;
 
-},{"./plugin":496}],490:[function(require,module,exports){
+},{"./plugin":498}],491:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -82791,7 +83412,7 @@ var Insomnia = (function () {
 }());
 exports.Insomnia = Insomnia;
 
-},{"./plugin":496}],491:[function(require,module,exports){
+},{"./plugin":498}],492:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -82885,7 +83506,7 @@ var Keyboard = (function () {
 }());
 exports.Keyboard = Keyboard;
 
-},{"./plugin":496}],492:[function(require,module,exports){
+},{"./plugin":498}],493:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -82943,7 +83564,7 @@ var LaunchNavigator = (function () {
 }());
 exports.LaunchNavigator = LaunchNavigator;
 
-},{"./plugin":496}],493:[function(require,module,exports){
+},{"./plugin":498}],494:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -83167,7 +83788,7 @@ var LocalNotifications = (function () {
 }());
 exports.LocalNotifications = LocalNotifications;
 
-},{"./plugin":496}],494:[function(require,module,exports){
+},{"./plugin":498}],495:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -83391,7 +84012,7 @@ var MediaError = (function () {
 }());
 exports.MediaError = MediaError;
 
-},{"./plugin":496,"rxjs/Observable":512}],495:[function(require,module,exports){
+},{"./plugin":498,"rxjs/Observable":514}],496:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -83407,7 +84028,7 @@ var plugin_1 = require('./plugin');
  *
  * @usage
  * ```js
- * import {Network, Connection} from 'ionic-native';
+ * import {Network} from 'ionic-native';
  *
  * // watch network for a disconnect
  * let disconnectSubscription = Network.onDisconnect().subscribe(() => {
@@ -83428,8 +84049,7 @@ var plugin_1 = require('./plugin');
 
  *   // prior to doing any api requests as well.
  *   setTimeout(() => {
- *     console.log(Network.connection);
- *     if (Network.connection === Connection.WIFI) {
+ *     if (Network.connection === 'wifi') {
  *       console.log('we got a wifi connection, woohoo!');
  *     }
  *   }, 3000);
@@ -83439,6 +84059,8 @@ var plugin_1 = require('./plugin');
  * connectSubscription.unsubscribe();
  *
  * ```
+ * @advanced
+ * The `connection` property will return one of the following connection types: `unknown`, `ethernet`, `wifi`, `2g`, `3g`, `4g`, `cellular`, `none`
  */
 var Network = (function () {
     function Network() {
@@ -83487,54 +84109,221 @@ var Network = (function () {
     return Network;
 }());
 exports.Network = Network;
-var Connection = (function () {
-    function Connection() {
-    }
-    Object.defineProperty(Connection, "UNKNOWN", {
-        get: function () { return 'unknown'; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Connection, "ETHERNET", {
-        get: function () { return 'ethernet'; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Connection, "WIFI", {
-        get: function () { return 'wifi'; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Connection, "CELL_2G", {
-        get: function () { return '2g'; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Connection, "CELL_3G", {
-        get: function () { return '3g'; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Connection, "CELL_4G", {
-        get: function () { return '4g'; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Connection, "CELL", {
-        get: function () { return 'cellular'; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Connection, "NONE", {
-        get: function () { return 'none'; },
-        enumerable: true,
-        configurable: true
-    });
-    return Connection;
-}());
-exports.Connection = Connection;
 
-},{"./plugin":496}],496:[function(require,module,exports){
+},{"./plugin":498}],497:[function(require,module,exports){
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var plugin_1 = require('./plugin');
+/**
+ * @name OneSignal
+ * @description
+ * The OneSignal plugin is an client implementation for using the [OneSignal](https://onesignal.com/) Service.
+ * OneSignal is a simple implementation for delivering push notifications.
+ *
+ * Requires Cordova plugin: `onesignal-cordova-plugin`. For more info, please see the [OneSignal Cordova Docs](https://documentation.onesignal.com/docs/phonegap-sdk-installation).
+ *
+ * @usage
+ * ```ts
+ * import {OneSignal} from 'ionic-native';
+ *
+ * let notificationOpenedCallback(jsonData: any) {
+ *   console.log('didReceiveRemoteNotificationCallBack: ' + JSON.stringify(jsonData));
+ * };
+ * OneSignal.init("b2f7f966-d8cc-11e4-bed1-df8f05be55ba",
+ *                                {googleProjectNumber: "703322744261"},
+ *                                notificationOpenedCallback);
+ *
+ * OneSignal.enableInAppAlertNotification(true);
+ * ```
+ *
+ */
+var OneSignal = (function () {
+    function OneSignal() {
+    }
+    /**
+     * Only required method you need to call to setup OneSignal to receive push notifications. Call this from the `deviceready` event.
+     *
+     * @param {appId} Your AppId from your OneSignal app
+     * @param {options} The Google Project Number (which you can get from the Google Developer Potal) and the autoRegister option.
+     * @returns {Promise} Returns a Promise that resolves when remote notification was recieved.
+     */
+    OneSignal.init = function (appId, options) { return; };
+    /**
+     * Call this when you would like to prompt an iOS user to accept push notifications with the default system prompt.
+     * Only use if you passed false to autoRegister when calling init.
+     */
+    OneSignal.registerForPushNotifications = function () { };
+    /**
+     * Tag a user based on an app event of your choosing so later you can create segments on [onesignal.com](https://onesignal.com/) to target these users.
+     * Recommend using sendTags over sendTag if you need to set more than one tag on a user at a time.
+     *
+     * @param {key} Key of your choosing to create or update.
+     * @param {value} Value to set on the key. NOTE: Passing in a blank String deletes the key, you can also call deleteTag.
+     */
+    OneSignal.sendTag = function (key, value) { };
+    /**
+   * Tag a user based on an app event of your choosing so later you can create segments on [onesignal.com](https://onesignal.com/) to target these users.
+   * Recommend using sendTags over sendTag if you need to set more than one tag on a user at a time.
+   *
+   * @param {json} Pass a json object with key/value pairs like: {key: "value", key2: "value2"}
+   */
+    OneSignal.sendTags = function (json) { };
+    /**
+    * Retrieve a list of tags that have been set on the user from the OneSignal server.
+    *
+    * @returns {Promise} Returns a Promise that resolves when tags are recieved.
+    */
+    OneSignal.getTags = function () { return; };
+    /**
+    * Deletes a tag that was previously set on a user with `sendTag` or `sendTags`. Use `deleteTags` if you need to delete more than one.
+    *
+    * @param {key} Key to remove.
+    */
+    OneSignal.deleteTag = function (key) { };
+    /**
+    * Deletes tags that were previously set on a user with `sendTag` or `sendTags`.
+    *
+    * @param {keys} Keys to remove.
+    */
+    OneSignal.deleteTags = function (keys) { };
+    /**
+    * Lets you retrieve the OneSignal user id and device token.
+    * Your handler is called after the device is successfully registered with OneSignal.
+    *
+    * @returns {Promise} Returns a Promise that reolves if the device was successfully registered.
+    * It returns a JSON with `userId`and `pushToken`.
+    */
+    OneSignal.getIds = function () { return; };
+    /**
+    * Warning:
+    * Only applies to Android and Amazon. You can call this from your UI from a button press for example to give your user's options for your notifications.
+    *
+    * By default OneSignal always vibrates the device when a notification is displayed unless the device is in a total silent mode.
+    * Passing false means that the device will only vibrate lightly when the device is in it's vibrate only mode.
+    *
+    * @param {enable} false to disable vibrate, true to re-enable it.
+    */
+    OneSignal.enableVibrate = function (enable) { };
+    /**
+    * Warning:
+    * Only applies to Android and Amazon. You can call this from your UI from a button press for example to give your user's options for your notifications.
+    *
+    * By default OneSignal plays the system's default notification sound when the device's notification system volume is turned on.
+    * Passing false means that the device will only vibrate unless the device is set to a total silent mode.
+    *
+    * @param {enable} false to disable sound, true to re-enable it.
+    */
+    OneSignal.enableSound = function (enable) { };
+    /**
+    * Warning:
+    * Only applies to Android and Amazon devices.
+    *
+    * By default this is false and notifications will not be shown when the user is in your app, instead the notificationOpenedCallback is fired.
+    * If set to true notifications will always show in the notification area and notificationOpenedCallback will not fire until the user taps on the notification.
+    *
+    * @param {enable} enable
+    */
+    OneSignal.enableNotificationsWhenActive = function (enable) { };
+    /**
+    * By default this is false and notifications will not be shown when the user is in your app, instead the notificationOpenedCallback is fired.
+    * If set to true notifications will be shown as native alert boxes if a notification is received when the user is in your app.
+    * The notificationOpenedCallback is then fired after the alert box is closed.
+    *
+    * @param {enable} enable
+    */
+    OneSignal.enableInAppAlertNotification = function (enable) { };
+    /**
+    * You can call this method with false to opt users out of receiving all notifications through OneSignal.
+    * You can pass true later to opt users back into notifications.
+    *
+    * @param {enable} enable
+    */
+    OneSignal.setSubscription = function (enable) { };
+    /**
+    *
+    * @param {notificationObj} Parameters see POST [documentation](https://documentation.onesignal.com/v2.0/docs/notifications-create-notification)
+    * @returns {Promise} Returns a Promise that resolves if the notification was send successfully.
+    */
+    OneSignal.postNotification = function (notificationObj) { return; };
+    /**
+    * Prompts the user for location permission to allow geotagging based on the "Location radius" filter on the OneSignal dashboard.
+    */
+    OneSignal.promptLocation = function () { };
+    /**
+    * Enable logging to help debug if you run into an issue setting up OneSignal.
+    * The logging levels are as follows: 0 = None, 1= Fatal, 2 = Errors, 3 = Warnings, 4 = Info, 5 = Debug, 6 = Verbose
+
+    * The higher the value the more information is shown.
+    *
+    * @param {loglevel} contains two properties: logLevel (for console logging) and visualLevel (for dialog messages)
+    */
+    OneSignal.setLogLevel = function (logLevel) { };
+    __decorate([
+        plugin_1.Cordova()
+    ], OneSignal, "init", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], OneSignal, "registerForPushNotifications", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], OneSignal, "sendTag", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], OneSignal, "sendTags", null);
+    __decorate([
+        plugin_1.Cordova()
+    ], OneSignal, "getTags", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], OneSignal, "deleteTag", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], OneSignal, "deleteTags", null);
+    __decorate([
+        plugin_1.Cordova()
+    ], OneSignal, "getIds", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], OneSignal, "enableVibrate", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], OneSignal, "enableSound", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], OneSignal, "enableNotificationsWhenActive", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], OneSignal, "enableInAppAlertNotification", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], OneSignal, "setSubscription", null);
+    __decorate([
+        plugin_1.Cordova()
+    ], OneSignal, "postNotification", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], OneSignal, "promptLocation", null);
+    __decorate([
+        plugin_1.Cordova({ sync: true })
+    ], OneSignal, "setLogLevel", null);
+    OneSignal = __decorate([
+        plugin_1.Plugin({
+            plugin: 'onesignal-cordova-plugin',
+            pluginRef: 'plugins.OneSignal',
+            repo: 'https://github.com/OneSignal/OneSignal-Cordova-SDK',
+            platforms: ['Android', 'iOS', 'Windows Phone 8']
+        })
+    ], OneSignal);
+    return OneSignal;
+}());
+exports.OneSignal = OneSignal;
+
+},{"./plugin":498}],498:[function(require,module,exports){
 "use strict";
 var util_1 = require('../util');
 var Observable_1 = require('rxjs/Observable');
@@ -83866,7 +84655,7 @@ function InstanceProperty(target, key, descriptor) {
 }
 exports.InstanceProperty = InstanceProperty;
 
-},{"../util":511,"rxjs/Observable":512}],497:[function(require,module,exports){
+},{"../util":513,"rxjs/Observable":514}],499:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -83906,7 +84695,7 @@ var Printer = (function () {
 }());
 exports.Printer = Printer;
 
-},{"./plugin":496}],498:[function(require,module,exports){
+},{"./plugin":498}],500:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -83980,7 +84769,7 @@ var Push = (function () {
 }());
 exports.Push = Push;
 
-},{"./plugin":496}],499:[function(require,module,exports){
+},{"./plugin":498}],501:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -84090,7 +84879,7 @@ var SafariViewController = (function () {
 }());
 exports.SafariViewController = SafariViewController;
 
-},{"./plugin":496}],500:[function(require,module,exports){
+},{"./plugin":498}],502:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -84152,7 +84941,7 @@ var Screenshot = (function () {
 }());
 exports.Screenshot = Screenshot;
 
-},{"./plugin":496}],501:[function(require,module,exports){
+},{"./plugin":498}],503:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -84204,7 +84993,7 @@ var SMS = (function () {
 }());
 exports.SMS = SMS;
 
-},{"./plugin":496}],502:[function(require,module,exports){
+},{"./plugin":498}],504:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -84235,7 +85024,7 @@ var SocialSharing = (function () {
      * @param file {string|Array<string>} URL(s) to file(s) or image(s), local path(s) to file(s) or image(s), or base64 data of an image. Only the first file/image will be used on Windows Phone.
      * @param url {string} A URL to share
      */
-    SocialSharing.share = function (message, subject, file, url) { };
+    SocialSharing.share = function (message, subject, file, url) { return; };
     /**
      * Shares using the share sheet with additional options and returns a result object or an error message (requires plugin version 5.1.0+)
      * @param options {object} The options object with the message, subject, files, url and chooserTitle properties.
@@ -84252,7 +85041,7 @@ var SocialSharing = (function () {
      * @param image
      * @param url
      */
-    SocialSharing.shareViaTwitter = function (message, image, url) { };
+    SocialSharing.shareViaTwitter = function (message, image, url) { return; };
     /**
      * Shares directly to Facebook
      * @param message {string}
@@ -84306,9 +85095,7 @@ var SocialSharing = (function () {
      */
     SocialSharing.shareViaEmail = function (message, subject, to, cc, bcc, files) { return; };
     __decorate([
-        plugin_1.Cordova({
-            sync: true
-        })
+        plugin_1.Cordova()
     ], SocialSharing, "share", null);
     __decorate([
         plugin_1.Cordova({
@@ -84322,7 +85109,6 @@ var SocialSharing = (function () {
     ], SocialSharing, "canShareVia", null);
     __decorate([
         plugin_1.Cordova({
-            sync: true,
             platforms: ['iOS', 'Android']
         })
     ], SocialSharing, "shareViaTwitter", null);
@@ -84373,7 +85159,7 @@ var SocialSharing = (function () {
 }());
 exports.SocialSharing = SocialSharing;
 
-},{"./plugin":496}],503:[function(require,module,exports){
+},{"./plugin":498}],505:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -84433,7 +85219,7 @@ var SpinnerDialog = (function () {
 }());
 exports.SpinnerDialog = SpinnerDialog;
 
-},{"./plugin":496}],504:[function(require,module,exports){
+},{"./plugin":498}],506:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -84488,7 +85274,7 @@ var Splashscreen = (function () {
 }());
 exports.Splashscreen = Splashscreen;
 
-},{"./plugin":496}],505:[function(require,module,exports){
+},{"./plugin":498}],507:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -84688,7 +85474,7 @@ var SQLite = (function () {
 }());
 exports.SQLite = SQLite;
 
-},{"./plugin":496}],506:[function(require,module,exports){
+},{"./plugin":498}],508:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -84844,7 +85630,7 @@ var StatusBar = (function () {
 }());
 exports.StatusBar = StatusBar;
 
-},{"./plugin":496}],507:[function(require,module,exports){
+},{"./plugin":498}],509:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -84995,7 +85781,7 @@ var Toast = (function () {
 }());
 exports.Toast = Toast;
 
-},{"./plugin":496}],508:[function(require,module,exports){
+},{"./plugin":498}],510:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -85098,7 +85884,7 @@ var TouchID = (function () {
 }());
 exports.TouchID = TouchID;
 
-},{"./plugin":496}],509:[function(require,module,exports){
+},{"./plugin":498}],511:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -85155,7 +85941,7 @@ var Vibration = (function () {
 }());
 exports.Vibration = Vibration;
 
-},{"./plugin":496}],510:[function(require,module,exports){
+},{"./plugin":498}],512:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -85231,7 +86017,7 @@ var WebIntent = (function () {
 }());
 exports.WebIntent = WebIntent;
 
-},{"./plugin":496}],511:[function(require,module,exports){
+},{"./plugin":498}],513:[function(require,module,exports){
 "use strict";
 function get(obj, path) {
     for (var i = 0, path = path.split('.'), len = path.length; i < len; i++) {
@@ -85245,7 +86031,7 @@ function get(obj, path) {
 exports.get = get;
 ;
 
-},{}],512:[function(require,module,exports){
+},{}],514:[function(require,module,exports){
 "use strict";
 var root_1 = require('./util/root');
 var observable_1 = require('./symbol/observable');
@@ -85381,7 +86167,7 @@ var Observable = (function () {
 }());
 exports.Observable = Observable;
 
-},{"./symbol/observable":523,"./util/root":531,"./util/toSubscriber":533}],513:[function(require,module,exports){
+},{"./symbol/observable":525,"./util/root":533,"./util/toSubscriber":535}],515:[function(require,module,exports){
 "use strict";
 exports.empty = {
     isUnsubscribed: true,
@@ -85390,7 +86176,7 @@ exports.empty = {
     complete: function () { }
 };
 
-},{}],514:[function(require,module,exports){
+},{}],516:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -85597,7 +86383,7 @@ var SubjectObservable = (function (_super) {
     return SubjectObservable;
 }(Observable_1.Observable));
 
-},{"./Observable":512,"./SubjectSubscription":515,"./Subscriber":516,"./Subscription":517,"./symbol/rxSubscriber":524,"./util/ObjectUnsubscribedError":525,"./util/throwError":532}],515:[function(require,module,exports){
+},{"./Observable":514,"./SubjectSubscription":517,"./Subscriber":518,"./Subscription":519,"./symbol/rxSubscriber":526,"./util/ObjectUnsubscribedError":527,"./util/throwError":534}],517:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -85638,7 +86424,7 @@ var SubjectSubscription = (function (_super) {
 }(Subscription_1.Subscription));
 exports.SubjectSubscription = SubjectSubscription;
 
-},{"./Subscription":517}],516:[function(require,module,exports){
+},{"./Subscription":519}],518:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -85890,7 +86676,7 @@ var SafeSubscriber = (function (_super) {
     return SafeSubscriber;
 }(Subscriber));
 
-},{"./Observer":513,"./Subscription":517,"./symbol/rxSubscriber":524,"./util/isFunction":529}],517:[function(require,module,exports){
+},{"./Observer":515,"./Subscription":519,"./symbol/rxSubscriber":526,"./util/isFunction":531}],519:[function(require,module,exports){
 "use strict";
 var isArray_1 = require('./util/isArray');
 var isObject_1 = require('./util/isObject');
@@ -86041,19 +86827,19 @@ var Subscription = (function () {
 }());
 exports.Subscription = Subscription;
 
-},{"./util/UnsubscriptionError":526,"./util/errorObject":527,"./util/isArray":528,"./util/isFunction":529,"./util/isObject":530,"./util/tryCatch":534}],518:[function(require,module,exports){
+},{"./util/UnsubscriptionError":528,"./util/errorObject":529,"./util/isArray":530,"./util/isFunction":531,"./util/isObject":532,"./util/tryCatch":536}],520:[function(require,module,exports){
 "use strict";
 var Observable_1 = require('../../Observable');
 var map_1 = require('../../operator/map');
 Observable_1.Observable.prototype.map = map_1.map;
 
-},{"../../Observable":512,"../../operator/map":521}],519:[function(require,module,exports){
+},{"../../Observable":514,"../../operator/map":523}],521:[function(require,module,exports){
 "use strict";
 var Observable_1 = require('../../Observable');
 var toPromise_1 = require('../../operator/toPromise');
 Observable_1.Observable.prototype.toPromise = toPromise_1.toPromise;
 
-},{"../../Observable":512,"../../operator/toPromise":522}],520:[function(require,module,exports){
+},{"../../Observable":514,"../../operator/toPromise":524}],522:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -86159,7 +86945,7 @@ function dispatchError(arg) {
     }
 }
 
-},{"../Observable":512,"../util/root":531}],521:[function(require,module,exports){
+},{"../Observable":514,"../util/root":533}],523:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -86246,7 +87032,7 @@ var MapSubscriber = (function (_super) {
     return MapSubscriber;
 }(Subscriber_1.Subscriber));
 
-},{"../Subscriber":516}],522:[function(require,module,exports){
+},{"../Subscriber":518}],524:[function(require,module,exports){
 "use strict";
 var root_1 = require('../util/root');
 /**
@@ -86275,7 +87061,7 @@ function toPromise(PromiseCtor) {
 }
 exports.toPromise = toPromise;
 
-},{"../util/root":531}],523:[function(require,module,exports){
+},{"../util/root":533}],525:[function(require,module,exports){
 "use strict";
 var root_1 = require('../util/root');
 var Symbol = root_1.root.Symbol;
@@ -86297,14 +87083,14 @@ else {
     exports.$$observable = '@@observable';
 }
 
-},{"../util/root":531}],524:[function(require,module,exports){
+},{"../util/root":533}],526:[function(require,module,exports){
 "use strict";
 var root_1 = require('../util/root');
 var Symbol = root_1.root.Symbol;
 exports.$$rxSubscriber = (typeof Symbol === 'function' && typeof Symbol.for === 'function') ?
     Symbol.for('rxSubscriber') : '@@rxSubscriber';
 
-},{"../util/root":531}],525:[function(require,module,exports){
+},{"../util/root":533}],527:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -86330,7 +87116,7 @@ var ObjectUnsubscribedError = (function (_super) {
 }(Error));
 exports.ObjectUnsubscribedError = ObjectUnsubscribedError;
 
-},{}],526:[function(require,module,exports){
+},{}],528:[function(require,module,exports){
 "use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
@@ -86353,30 +87139,30 @@ var UnsubscriptionError = (function (_super) {
 }(Error));
 exports.UnsubscriptionError = UnsubscriptionError;
 
-},{}],527:[function(require,module,exports){
+},{}],529:[function(require,module,exports){
 "use strict";
 // typeof any so that it we don't have to cast when comparing a result to the error object
 exports.errorObject = { e: {} };
 
-},{}],528:[function(require,module,exports){
+},{}],530:[function(require,module,exports){
 "use strict";
 exports.isArray = Array.isArray || (function (x) { return x && typeof x.length === 'number'; });
 
-},{}],529:[function(require,module,exports){
+},{}],531:[function(require,module,exports){
 "use strict";
 function isFunction(x) {
     return typeof x === 'function';
 }
 exports.isFunction = isFunction;
 
-},{}],530:[function(require,module,exports){
+},{}],532:[function(require,module,exports){
 "use strict";
 function isObject(x) {
     return x != null && typeof x === 'object';
 }
 exports.isObject = isObject;
 
-},{}],531:[function(require,module,exports){
+},{}],533:[function(require,module,exports){
 (function (global){
 "use strict";
 var objectTypes = {
@@ -86398,12 +87184,12 @@ if (freeGlobal && (freeGlobal.global === freeGlobal || freeGlobal.window === fre
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 
-},{}],532:[function(require,module,exports){
+},{}],534:[function(require,module,exports){
 "use strict";
 function throwError(e) { throw e; }
 exports.throwError = throwError;
 
-},{}],533:[function(require,module,exports){
+},{}],535:[function(require,module,exports){
 "use strict";
 var Subscriber_1 = require('../Subscriber');
 var rxSubscriber_1 = require('../symbol/rxSubscriber');
@@ -86420,7 +87206,7 @@ function toSubscriber(nextOrObserver, error, complete) {
 }
 exports.toSubscriber = toSubscriber;
 
-},{"../Subscriber":516,"../symbol/rxSubscriber":524}],534:[function(require,module,exports){
+},{"../Subscriber":518,"../symbol/rxSubscriber":526}],536:[function(require,module,exports){
 "use strict";
 var errorObject_1 = require('./errorObject');
 var tryCatchTarget;
@@ -86440,9 +87226,9 @@ function tryCatch(fn) {
 exports.tryCatch = tryCatch;
 ;
 
-},{"./errorObject":527}],535:[function(require,module,exports){
+},{"./errorObject":529}],537:[function(require,module,exports){
 
-},{}]},{},[1,535])
+},{}]},{},[1,537])
 
 
 //# sourceMappingURL=app.bundle.js.map

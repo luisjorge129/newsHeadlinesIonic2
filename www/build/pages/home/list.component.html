@@ -1,11 +1,10 @@
-<h4>Sources</h4>
-
-<ion-list *ngFor="let source of sourceList">
-  <ion-item>
-    <ion-thumbnail item-left>
-      <img src="{{ source.urlsToLogos.medium }}">
-    </ion-thumbnail>
-    <h2>{{ source.name }}</h2>
-    <p>{{ source.description }}</p>
-  </ion-item>
+<ion-list  *ngFor="let source of sourceList" (click)="sourceArticle(source.id, source.name)" [sourceListToWatch]="sourceList">
+    <button class="item" ion-item="">
+        <ion-thumbnail item-left>
+            <img src="{{ source.urlsToLogos.medium }}">
+        </ion-thumbnail>
+        <h2>{{ source.name }}</h2>
+        <p>{{ source.description }}</p>
+        <!--<ion-icon name="arrow-forward" item-right></ion-icon>-->
+    </button>
 </ion-list>
