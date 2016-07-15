@@ -39,6 +39,7 @@ var MyApp = (function () {
 }());
 exports.MyApp = MyApp;
 ionic_angular_1.ionicBootstrap(MyApp, [http_1.HTTP_PROVIDERS]);
+
 },{"./pages/tabs/tabs":6,"./providers/news-headline-service/news-headline.service":7,"@angular/core":154,"@angular/http":242,"ionic-angular":418,"ionic-native":445}],2:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -89,6 +90,7 @@ var NewsSourceList = (function () {
     return NewsSourceList;
 }());
 exports.NewsSourceList = NewsSourceList;
+
 },{"../../pages/news-source-detail/news-source-detail":5,"../../providers/news-headline-service/news-headline.service":7,"@angular/core":154,"ionic-angular":418}],3:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -119,6 +121,7 @@ var AboutPage = (function () {
     return AboutPage;
 }());
 exports.AboutPage = AboutPage;
+
 },{"@angular/core":154,"ionic-angular":418,"ionic-native":445}],4:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -147,6 +150,7 @@ var HomePage = (function () {
     return HomePage;
 }());
 exports.HomePage = HomePage;
+
 },{"../../components/news-source-list/news-source-list.component":2,"@angular/core":154,"ionic-angular":418}],5:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -196,6 +200,7 @@ var NewsSourceDetailPage = (function () {
     return NewsSourceDetailPage;
 }());
 exports.NewsSourceDetailPage = NewsSourceDetailPage;
+
 },{"../../providers/news-headline-service/news-headline.service":7,"@angular/core":154,"ionic-angular":418,"ionic-native":445}],6:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -228,6 +233,7 @@ var TabsPage = (function () {
     return TabsPage;
 }());
 exports.TabsPage = TabsPage;
+
 },{"../about/about":3,"../home/home":4,"@angular/core":154}],7:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -278,6 +284,7 @@ var NewsHeadlineService = (function () {
     return NewsHeadlineService;
 }());
 exports.NewsHeadlineService = NewsHeadlineService;
+
 },{"@angular/core":154,"@angular/http":242,"rxjs/add/operator/map":520,"rxjs/add/operator/toPromise":521}],8:[function(require,module,exports){
 "use strict";
 function __export(m) {
@@ -85164,7 +85171,7 @@ var SpinnerDialog = (function () {
      * Shows the spinner dialog
      * @param title {string} Spinner title (shows on Android only)
      * @param message {string} Spinner message
-     * @param cancelCallback {boolean|function} Set to true to set spinner not cancelable. Or provide a function to call when the user cancels the spinner.
+     * @param cancelCallback {boolean|function} Set to false to set spinner not cancelable. Or provide a function to call when the user cancels the spinner.
      * @param iOSOptions {object} Options for iOS only
      */
     SpinnerDialog.show = function (title, message, cancelCallback, iOSOptions) { };
@@ -85812,7 +85819,7 @@ var TouchID = (function () {
      *
      * @return {Promise} Returns a Promise that resolves if yes, rejects if no.
      */
-    TouchID.isAvailable = function () { return; };
+    TouchID.prototype.isAvailable = function () { return; };
     /**
      * Show TouchID dialog and wait for a fingerprint scan. If user taps 'Enter Password' button, brings up standard system passcode screen.
      *
@@ -85837,7 +85844,7 @@ var TouchID = (function () {
     TouchID.verifyFingerprintWithCustomPasswordFallbackAndEnterPasswordLabel = function (message, enterPasswordLabel) { return; };
     __decorate([
         plugin_1.Cordova()
-    ], TouchID, "isAvailable", null);
+    ], TouchID.prototype, "isAvailable", null);
     __decorate([
         plugin_1.Cordova()
     ], TouchID, "verifyFingerprint", null);
