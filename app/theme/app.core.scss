@@ -1,14 +1,21 @@
 // http://ionicframework.com/docs/v2/theming/
-
-
 // App Shared Imports
 // --------------------------------------------------
 // These are the imports which make up the design of this app.
 // By default each design mode includes these shared imports.
 // App Shared Sass variables belong in app.variables.scss.
-
 @import "../pages/about/about";
-
 @import "../pages/contact/contact";
-
 @import "../pages/home/home";
+
+ion-spinner svg {
+  width: 130px;
+  height: 130px;
+  stroke: #444;
+  fill: #222;
+  position: absolute;
+  top: 220px;
+  left: 130px;
+  bottom: 50px;
+  text-align: center;
+}

@@ -1,3 +1,4 @@
+<ion-spinner *ngIf="isLoading"></ion-spinner>
 <ion-list  *ngFor="let source of sourceList" (click)="sourceArticle(source.id, source.name)" [sourceListToWatch]="sourceList">
     <button class="item" ion-item="">
         <ion-thumbnail item-left>

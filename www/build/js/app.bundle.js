@@ -117,12 +117,15 @@ var SourceList = (function () {
         this.nav = nav;
         this.sourceList = [];
         this.articleList = [];
+        this.isLoading = false;
     }
     SourceList.prototype.ngOnInit = function () {
         var _this = this;
+        this.isLoading = true;
         this.newsHeadline.getSources()
             .subscribe(function (sourceList) {
             _this.sourceList = sourceList;
+            _this.isLoading = false;
         });
     };
     SourceList.prototype.sourceArticle = function (source, sourceTitle) {
@@ -137,7 +140,7 @@ var SourceList = (function () {
     SourceList = __decorate([
         core_1.Component({
             selector: 'source-list',
-            templateUrl: 'build/pages/home/list.component.html',
+            templateUrl: 'build/pages/home/list.component.html'
         }), 
         __metadata('design:paramtypes', [newsHeadline_service_1.NewsHeadlineService, ionic_angular_1.NavController])
     ], SourceList);
@@ -218,15 +221,18 @@ var sourceArticles = (function () {
         this.params = params;
         this.articleList = [];
         this.sourceTitle = "";
+        this.isLoading = false;
     }
     sourceArticles.prototype.ngOnInit = function () {
         var _this = this;
         event.preventDefault();
+        this.isLoading = true;
         var source = this.params.get('source');
         this.sourceTitle = this.params.get('sourceTitle');
         this.newsHeadline.getArticles(source)
             .subscribe(function (articleList) {
             _this.articleList = articleList;
+            _this.isLoading = false;
         });
     };
     sourceArticles.prototype.goBack = function () {
