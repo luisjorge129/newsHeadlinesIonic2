@@ -14,7 +14,7 @@ var core_1 = require('@angular/core');
 var tabs_1 = require('./pages/tabs/tabs');
 var http_1 = require('@angular/http');
 var ionic_angular_1 = require('ionic-angular');
-var newsHeadline_service_1 = require('./pages/home/newsHeadline.service');
+var news_headline_service_1 = require('./providers/news-headline-service/news-headline.service');
 var MyApp = (function () {
     function MyApp(platform) {
         this.platform = platform;
@@ -29,7 +29,7 @@ var MyApp = (function () {
         core_1.Component({
             template: '<ion-nav [root]="rootPage"></ion-nav>',
             providers: [
-                newsHeadline_service_1.NewsHeadlineService,
+                news_headline_service_1.NewsHeadlineService,
                 { provide: 'apiKey', useValue: 'f47ec438629b40af849f1d74828da59a' },
                 { provide: 'apiUrl', useValue: 'https://newsapi.org/v1/' }]
         }), 
@@ -39,8 +39,57 @@ var MyApp = (function () {
 }());
 exports.MyApp = MyApp;
 ionic_angular_1.ionicBootstrap(MyApp, [http_1.HTTP_PROVIDERS]);
-
-},{"./pages/home/newsHeadline.service":5,"./pages/tabs/tabs":7,"@angular/core":154,"@angular/http":242,"ionic-angular":418,"ionic-native":445}],2:[function(require,module,exports){
+},{"./pages/tabs/tabs":6,"./providers/news-headline-service/news-headline.service":7,"@angular/core":154,"@angular/http":242,"ionic-angular":418,"ionic-native":445}],2:[function(require,module,exports){
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var core_1 = require("@angular/core");
+var ionic_angular_1 = require("ionic-angular");
+var news_source_detail_1 = require("../../pages/news-source-detail/news-source-detail");
+var news_headline_service_1 = require("../../providers/news-headline-service/news-headline.service");
+var NewsSourceList = (function () {
+    function NewsSourceList(newsHeadline, nav) {
+        this.newsHeadline = newsHeadline;
+        this.nav = nav;
+        this.sourceList = [];
+        this.articleList = [];
+        this.isLoading = false;
+    }
+    NewsSourceList.prototype.ngOnInit = function () {
+        var _this = this;
+        this.isLoading = true;
+        this.newsHeadline.getSources().subscribe(function (sourceList) {
+            _this.sourceList = sourceList;
+            _this.isLoading = false;
+        });
+    };
+    NewsSourceList.prototype.sourceArticle = function (source, sourceTitle) {
+        this.nav.push(news_source_detail_1.NewsSourceDetailPage, {
+            source: source,
+            sourceTitle: sourceTitle
+        }, {
+            animation: 'wp-transition',
+            direction: 'forward'
+        });
+    };
+    NewsSourceList = __decorate([
+        core_1.Component({
+            selector: 'news-source-list',
+            templateUrl: 'build/components/news-source-list/news-source-list.component.html'
+        }), 
+        __metadata('design:paramtypes', [news_headline_service_1.NewsHeadlineService, ionic_angular_1.NavController])
+    ], NewsSourceList);
+    return NewsSourceList;
+}());
+exports.NewsSourceList = NewsSourceList;
+},{"../../pages/news-source-detail/news-source-detail":5,"../../providers/news-headline-service/news-headline.service":7,"@angular/core":154,"ionic-angular":418}],3:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -53,10 +102,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var ionic_angular_1 = require('ionic-angular');
+var ionic_native_1 = require('ionic-native');
 var AboutPage = (function () {
     function AboutPage(navController) {
         this.navController = navController;
     }
+    AboutPage.prototype.openInBrowser = function (url) {
+        ionic_native_1.InAppBrowser.open(url, "_system", "location=true");
+    };
     AboutPage = __decorate([
         core_1.Component({
             templateUrl: 'build/pages/about/about.html'
@@ -66,8 +119,7 @@ var AboutPage = (function () {
     return AboutPage;
 }());
 exports.AboutPage = AboutPage;
-
-},{"@angular/core":154,"ionic-angular":418}],3:[function(require,module,exports){
+},{"@angular/core":154,"ionic-angular":418,"ionic-native":445}],4:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -78,16 +130,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var core_1 = require('@angular/core');
-var ionic_angular_1 = require('ionic-angular');
-var list_component_1 = require('../home/list.component');
+var core_1 = require("@angular/core");
+var ionic_angular_1 = require("ionic-angular");
+var news_source_list_component_1 = require("../../components/news-source-list/news-source-list.component");
 var HomePage = (function () {
     function HomePage(navController) {
         this.navController = navController;
     }
     HomePage = __decorate([
         core_1.Component({
-            directives: [list_component_1.SourceList],
+            directives: [news_source_list_component_1.NewsSourceList],
             templateUrl: 'build/pages/home/home.html'
         }), 
         __metadata('design:paramtypes', [ionic_angular_1.NavController])
@@ -95,8 +147,7 @@ var HomePage = (function () {
     return HomePage;
 }());
 exports.HomePage = HomePage;
-
-},{"../home/list.component":4,"@angular/core":154,"ionic-angular":418}],4:[function(require,module,exports){
+},{"../../components/news-source-list/news-source-list.component":2,"@angular/core":154,"ionic-angular":418}],5:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -108,175 +159,44 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var newsHeadline_service_1 = require('../home/newsHeadline.service');
-var ionic_angular_1 = require('ionic-angular');
-var sourceDetail_component_1 = require('../home/sourceDetail.component');
-var SourceList = (function () {
-    function SourceList(newsHeadline, nav) {
-        this.newsHeadline = newsHeadline;
-        this.nav = nav;
-        this.sourceList = [];
-        this.articleList = [];
-        this.isLoading = false;
-    }
-    SourceList.prototype.ngOnInit = function () {
-        var _this = this;
-        this.isLoading = true;
-        this.newsHeadline.getSources()
-            .subscribe(function (sourceList) {
-            _this.sourceList = sourceList;
-            _this.isLoading = false;
-        });
-    };
-    SourceList.prototype.sourceArticle = function (source, sourceTitle) {
-        this.nav.push(sourceDetail_component_1.sourceArticles, {
-            source: source,
-            sourceTitle: sourceTitle
-        }, {
-            animation: 'wp-transition',
-            direction: 'forward'
-        });
-    };
-    SourceList = __decorate([
-        core_1.Component({
-            selector: 'source-list',
-            templateUrl: 'build/pages/home/list.component.html'
-        }), 
-        __metadata('design:paramtypes', [newsHeadline_service_1.NewsHeadlineService, ionic_angular_1.NavController])
-    ], SourceList);
-    return SourceList;
-}());
-exports.SourceList = SourceList;
-
-},{"../home/newsHeadline.service":5,"../home/sourceDetail.component":6,"@angular/core":154,"ionic-angular":418}],5:[function(require,module,exports){
-"use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
-var core_1 = require('@angular/core');
-var http_1 = require('@angular/http');
-require('rxjs/add/operator/map');
-require('rxjs/add/operator/toPromise');
-var NewsHeadlineService = (function () {
-    function NewsHeadlineService(http, key, url) {
-        this.http = http;
-        this.key = key;
-        this.url = url;
-    }
-    NewsHeadlineService.prototype.getSources = function () {
-        var searchParams = new http_1.URLSearchParams();
-        searchParams.append('apiKey', this.key);
-        return this.http.get(this.url + "sources", { search: searchParams })
-            .map(function (response) {
-            return response.json().sources;
-        });
-    };
-    NewsHeadlineService.prototype.getArticles = function (source) {
-        var searchParams = new http_1.URLSearchParams();
-        searchParams.append('apiKey', this.key);
-        searchParams.append('source', source);
-        return this.http.get(this.url + "articles", { search: searchParams })
-            .map(function (response) {
-            return response.json();
-        });
-    };
-    NewsHeadlineService = __decorate([
-        core_1.Injectable(),
-        __param(1, core_1.Inject('apiKey')),
-        __param(2, core_1.Inject('apiUrl')), 
-        __metadata('design:paramtypes', [http_1.Http, Object, Object])
-    ], NewsHeadlineService);
-    return NewsHeadlineService;
-}());
-exports.NewsHeadlineService = NewsHeadlineService;
-
-},{"@angular/core":154,"@angular/http":242,"rxjs/add/operator/map":520,"rxjs/add/operator/toPromise":521}],6:[function(require,module,exports){
-"use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var core_1 = require('@angular/core');
-var newsHeadline_service_1 = require('../home/newsHeadline.service');
-var ionic_angular_1 = require('ionic-angular');
 var ionic_native_1 = require('ionic-native');
-var sourceArticles = (function () {
-    function sourceArticles(newsHeadline, nav, params) {
+var ionic_angular_1 = require('ionic-angular');
+var news_headline_service_1 = require('../../providers/news-headline-service/news-headline.service');
+var NewsSourceDetailPage = (function () {
+    function NewsSourceDetailPage(newsHeadline, nav, params) {
         this.newsHeadline = newsHeadline;
         this.nav = nav;
         this.params = params;
         this.articleList = [];
-        this.sourceTitle = "";
+        this.sourceTitle = '';
         this.isLoading = false;
     }
-    sourceArticles.prototype.ngOnInit = function () {
+    NewsSourceDetailPage.prototype.ngOnInit = function () {
         var _this = this;
-        event.preventDefault();
         this.isLoading = true;
         var source = this.params.get('source');
         this.sourceTitle = this.params.get('sourceTitle');
-        this.newsHeadline.getArticles(source)
-            .subscribe(function (articleList) {
+        this.newsHeadline.getArticles(source).subscribe(function (articleList) {
             _this.articleList = articleList;
             _this.isLoading = false;
         });
     };
-    sourceArticles.prototype.goBack = function () {
+    NewsSourceDetailPage.prototype.goBack = function () {
         this.nav.pop();
     };
-    sourceArticles.prototype.openArticle = function (articleUrl) {
-        ionic_native_1.SafariViewController.isAvailable()
-            .then(function (available) {
-            if (available) {
-                console.log("Is Available");
-                ionic_native_1.SafariViewController.show({
-                    url: articleUrl,
-                    hidden: false,
-                    animated: false,
-                    transition: 'curl',
-                    enterReaderModeIfAvailable: true,
-                    tintColor: '#ff0000'
-                })
-                    .then(function (result) {
-                    if (result.event === 'opened')
-                        console.log("Opened");
-                    else if (result.event === 'loaded')
-                        console.log("Loaded");
-                    else if (result.event === 'closed')
-                        console.log("Closed");
-                    console.log("Successfully open...");
-                }, function (error) { return console.error(error); });
-            }
-            else {
-                console.warn("Safari view controller is not working.");
-            }
-        });
+    NewsSourceDetailPage.prototype.openArticle = function (articleUrl) {
+        ionic_native_1.InAppBrowser.open(articleUrl, '_system', 'location=true');
     };
-    sourceArticles = __decorate([
+    NewsSourceDetailPage = __decorate([
         core_1.Component({
-            templateUrl: 'build/pages/home/sourceDetail.component.html'
+            templateUrl: 'build/pages/news-source-detail/news-source-detail.html',
         }), 
-        __metadata('design:paramtypes', [newsHeadline_service_1.NewsHeadlineService, ionic_angular_1.NavController, ionic_angular_1.NavParams])
-    ], sourceArticles);
-    return sourceArticles;
+        __metadata('design:paramtypes', [news_headline_service_1.NewsHeadlineService, ionic_angular_1.NavController, ionic_angular_1.NavParams])
+    ], NewsSourceDetailPage);
+    return NewsSourceDetailPage;
 }());
-exports.sourceArticles = sourceArticles;
-
-},{"../home/newsHeadline.service":5,"@angular/core":154,"ionic-angular":418,"ionic-native":445}],7:[function(require,module,exports){
+exports.NewsSourceDetailPage = NewsSourceDetailPage;
+},{"../../providers/news-headline-service/news-headline.service":7,"@angular/core":154,"ionic-angular":418,"ionic-native":445}],6:[function(require,module,exports){
 "use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -308,8 +228,57 @@ var TabsPage = (function () {
     return TabsPage;
 }());
 exports.TabsPage = TabsPage;
-
-},{"../about/about":2,"../home/home":3,"@angular/core":154}],8:[function(require,module,exports){
+},{"../about/about":3,"../home/home":4,"@angular/core":154}],7:[function(require,module,exports){
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+var core_1 = require("@angular/core");
+var http_1 = require("@angular/http");
+require("rxjs/add/operator/map");
+require("rxjs/add/operator/toPromise");
+var NewsHeadlineService = (function () {
+    function NewsHeadlineService(http, key, url) {
+        this.http = http;
+        this.key = key;
+        this.url = url;
+    }
+    NewsHeadlineService.prototype.getSources = function () {
+        var searchParams = new http_1.URLSearchParams();
+        searchParams.append('apiKey', this.key);
+        return this.http.get(this.url + "sources", {
+            search: searchParams }).map(function (response) {
+            return response.json().sources;
+        });
+    };
+    NewsHeadlineService.prototype.getArticles = function (source) {
+        var searchParams = new http_1.URLSearchParams();
+        searchParams.append('apiKey', this.key);
+        searchParams.append('source', source);
+        return this.http.get(this.url + "articles", {
+            search: searchParams }).map(function (response) {
+            return response.json();
+        });
+    };
+    NewsHeadlineService = __decorate([
+        core_1.Injectable(),
+        __param(1, core_1.Inject('apiKey')),
+        __param(2, core_1.Inject('apiUrl')), 
+        __metadata('design:paramtypes', [http_1.Http, Object, Object])
+    ], NewsHeadlineService);
+    return NewsHeadlineService;
+}());
+exports.NewsHeadlineService = NewsHeadlineService;
+},{"@angular/core":154,"@angular/http":242,"rxjs/add/operator/map":520,"rxjs/add/operator/toPromise":521}],8:[function(require,module,exports){
 "use strict";
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
@@ -85195,7 +85164,7 @@ var SpinnerDialog = (function () {
      * Shows the spinner dialog
      * @param title {string} Spinner title (shows on Android only)
      * @param message {string} Spinner message
-     * @param cancelCallback {boolean|function} Set to false to set spinner not cancelable. Or provide a function to call when the user cancels the spinner.
+     * @param cancelCallback {boolean|function} Set to true to set spinner not cancelable. Or provide a function to call when the user cancels the spinner.
      * @param iOSOptions {object} Options for iOS only
      */
     SpinnerDialog.show = function (title, message, cancelCallback, iOSOptions) { };
@@ -85843,7 +85812,7 @@ var TouchID = (function () {
      *
      * @return {Promise} Returns a Promise that resolves if yes, rejects if no.
      */
-    TouchID.prototype.isAvailable = function () { return; };
+    TouchID.isAvailable = function () { return; };
     /**
      * Show TouchID dialog and wait for a fingerprint scan. If user taps 'Enter Password' button, brings up standard system passcode screen.
      *
@@ -85868,7 +85837,7 @@ var TouchID = (function () {
     TouchID.verifyFingerprintWithCustomPasswordFallbackAndEnterPasswordLabel = function (message, enterPasswordLabel) { return; };
     __decorate([
         plugin_1.Cordova()
-    ], TouchID.prototype, "isAvailable", null);
+    ], TouchID, "isAvailable", null);
     __decorate([
         plugin_1.Cordova()
     ], TouchID, "verifyFingerprint", null);

@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { TabsPage } from './pages/tabs/tabs';
 import { HTTP_PROVIDERS } from '@angular/http';
 import { Platform, ionicBootstrap } from 'ionic-angular';
-import { NewsHeadlineService } from './pages/home/newsHeadline.service';
+import { NewsHeadlineService } from './providers/news-headline-service/news-headline.service';
 
 @Component({
     template: '<ion-nav [root]="rootPage"></ion-nav>',
