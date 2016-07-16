@@ -6,3 +6,4 @@ plugins/
 .DS_Store
 Thumbs.db
 .idea/
+.io-config.json

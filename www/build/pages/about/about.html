@@ -1,43 +1,24 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>
-      About
-    </ion-title>
-  </ion-navbar>
+    <ion-navbar>
+        <ion-title>
+            About
+        </ion-title>
+    </ion-navbar>
 </ion-header>
 
 <ion-content padding class="about">
-   <ion-list>
-    <ion-list-header>
-      Developers
-    </ion-list-header>
+    <ion-list>
+        <ion-list-header>
+            Developers
+        </ion-list-header>
 
-    <ion-item>
-      <ion-avatar item-left>
-        <img src="img/luis.jpg">
-      </ion-avatar>
-      <h2>Luis J. Perez</h2>
-      <h3>Developer</h3>
-      <p>Linkedin: <a (click)="openInBrowser('https://pr.linkedin.com/in/luisjorge129')">https://pr.linkedin.com/in/luisjorge129</a>
-</p>
-    </ion-item>
-
-    <ion-item>
-      <ion-avatar item-left>
-        <img src="img/jose.jpg">
-      </ion-avatar>
-      <h2>Jose Marquez</h2>
-      <h3>Developer</h3>
-      <p>Linkedin: <a (click)="openInBrowser('https://www.linkedin.com/in/ivannetwork')">https://www.linkedin.com/in/ivannetwork</a></p>
-    </ion-item>
-
-    <ion-item>
-      <ion-avatar item-left>
-        <img src="img/jorge.jpg">
-      </ion-avatar>
-      <h2>Jorge L. Perez</h2>
-      <h3>Developer</h3>
-      <p>Linkedin: <a (click)="openInBrowser('https://pr.linkedin.com/in/perezjorge718/en')">https://pr.linkedin.com/in/perezjorge718/en</a></p>
-    </ion-item>
-   </ion-list>
+        <ion-item *ngFor="let dev of devs">
+            <ion-avatar item-left>
+                <img [src]="dev.imgUrl">
+            </ion-avatar>
+            <h2>{{dev.name}}</h2>
+            <h3>Developer</h3>
+            <p>Linkedin: <a (click)="openInBrowser(dev)">{{dev.linkedInUrl}}</a></p>
+        </ion-item>
+    </ion-list>
 </ion-content>
